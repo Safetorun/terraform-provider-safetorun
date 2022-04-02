@@ -1,6 +1,7 @@
 package main
 
 import (
+	"github.com/Safetorun/safe_to_run_admin_api/safetorun"
 	"github.com/urfave/cli/v2"
 	"log"
 	"os"
@@ -45,8 +46,8 @@ func main() {
 		Usage: "Create a new application on safe to run",
 		Action: func(c *cli.Context) error {
 
-			client := New(authToken)
-			_, err := client.CreateOrganisation(CreateOrganisationRequest{
+			client := safetorun.New(authToken)
+			_, err := client.CreateOrganisation(safetorun.CreateOrganisationRequest{
 				OrganisationName: organisationName,
 				OrganisationId:   organisationId,
 				AdminUser:        adminEmail,
@@ -64,21 +65,21 @@ func main() {
 				}
 
 				switch re.Status {
-				case CreateInProgress:
+				case safetorun.CreateInProgress:
 					time.Sleep(time.Second)
 					break
-				case InfrastructureCreated:
+				case safetorun.InfrastructureCreated:
 					println("Create complete")
 					return nil
 
-				case ErrorDestroying:
+				case safetorun.ErrorDestroying:
 					println("Something went wrong, destroying.")
 					time.Sleep(time.Second)
 					break
-				case DeleteComplete:
+				case safetorun.DeleteComplete:
 					println("Delete complete.")
 					return nil
-				case AlreadyExists:
+				case safetorun.AlreadyExists:
 					println("Org already exists")
 					return nil
 				}
