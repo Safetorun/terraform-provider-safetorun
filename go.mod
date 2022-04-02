@@ -1,4 +1,4 @@
-module safetorun/admin
+module github.com/Safetorun/safe_to_run_admin_api
 
 go 1.18
 
