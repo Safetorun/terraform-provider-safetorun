@@ -10,7 +10,7 @@ import (
 )
 
 const (
-	URL = "https://c9w5whh2jc.execute-api.eu-west-1.amazonaws.com/Prod/"
+	URL = "https://c9w5whh2jc.execute-api.eu-west-1.amazonaws.com/Prod"
 )
 
 type CreateOrganisationRequest struct {
@@ -24,7 +24,7 @@ type CreateOrganisationResponse struct {
 	OrganisationId string `json:"organisation_id"`
 }
 
-func CreateOrganisation(request CreateOrganisationRequest, authToken string) (*CreateOrganisationResponse, error) {
+func (c Client) CreateOrganisation(request CreateOrganisationRequest) (*CreateOrganisationResponse, error) {
 	body, err := json.Marshal(request)
 
 	writer := bytes.NewBuffer(body)
@@ -35,7 +35,7 @@ func CreateOrganisation(request CreateOrganisationRequest, authToken string) (*C
 
 	r, err := http.NewRequest("POST", fmt.Sprintf("%s/organisation/create", URL), writer)
 
-	r.Header.Set("Bearer", authToken)
+	r.Header.Set("Bearer", c.AuthToken)
 
 	client := http.Client{}
 

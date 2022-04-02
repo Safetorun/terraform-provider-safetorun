@@ -1,15 +1,17 @@
 package main
 
 import (
-	"fmt"
 	"github.com/urfave/cli/v2"
 	"log"
 	"os"
+	"time"
 )
 
 func main() {
 	var organisationName string
 	var authToken string
+	var organisationId string
+	var adminEmail string
 
 	app := &cli.App{
 		Flags: []cli.Flag{
@@ -27,29 +29,60 @@ func main() {
 				Destination: &authToken,
 				Required:    true,
 			},
+			&cli.StringFlag{
+				Name:        "admin_email",
+				Usage:       "Admin email",
+				Destination: &adminEmail,
+				Required:    true,
+			},
+			&cli.StringFlag{
+				Name:        "organisation_id",
+				Destination: &organisationId,
+				Required:    true,
+			},
 		},
 		Name:  "create",
 		Usage: "Create a new application on safe to run",
 		Action: func(c *cli.Context) error {
-			re, err := QueryStatus(organisationName, authToken)
 
-			if err != nil {
-				log.Fatal(err)
-			}
-
-			println(fmt.Sprintf("%+v", re))
-			response, err := CreateOrganisation(CreateOrganisationRequest{
+			client := New(authToken)
+			_, err := client.CreateOrganisation(CreateOrganisationRequest{
 				OrganisationName: organisationName,
-				OrganisationId:   "",
-				AdminUser:        "",
-			}, authToken)
+				OrganisationId:   organisationId,
+				AdminUser:        adminEmail,
+			})
 
 			if err != nil {
 				log.Fatal(err)
 			}
 
-			println(fmt.Sprintf("%+v", *response))
-			return nil
+			for {
+				re, err := client.QueryStatus(organisationName)
+
+				if err != nil {
+					log.Fatal(err)
+				}
+
+				switch re.Status {
+				case CreateInProgress:
+					time.Sleep(time.Second)
+					break
+				case InfrastructureCreated:
+					println("Create complete")
+					return nil
+
+				case ErrorDestroying:
+					println("Something went wrong, destroying.")
+					time.Sleep(time.Second)
+					break
+				case DeleteComplete:
+					println("Delete complete.")
+					return nil
+				case AlreadyExists:
+					println("Org already exists")
+					return nil
+				}
+			}
 		},
 	}
 

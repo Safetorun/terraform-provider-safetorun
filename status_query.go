@@ -4,7 +4,6 @@ import (
 	"context"
 	"fmt"
 	"github.com/machinebox/graphql"
-	"log"
 )
 
 type OrgStatusResult struct {
@@ -23,10 +22,9 @@ const (
 	ErrorDestroying                    = iota
 	DeleteComplete                     = iota
 	AlreadyExists                      = iota
-	Noop                               = iota
 )
 
-func QueryStatus(organisationName string, authToken string) (*OrganisationStatus, error) {
+func (c Client) QueryStatus(organisationName string) (*OrganisationStatus, error) {
 	query := fmt.Sprintf(`query MyQuery {
 		  getOrganisationStatus(organisationName: "%s") {
 			OrganisationName
@@ -38,8 +36,7 @@ func QueryStatus(organisationName string, authToken string) (*OrganisationStatus
 	req := graphql.NewRequest(query)
 	url := "https://ulhdaocpgfewxmt7xxf55l6mzm.appsync-api.eu-west-1.amazonaws.com/graphql"
 	client := graphql.NewClient(url)
-	client.Log = func(s string) { log.Println(s) }
-	req.Header.Set("Authorization", authToken)
+	req.Header.Set("Authorization", c.AuthToken)
 
 	var status OrgStatusResult
 	err := client.Run(context.Background(), req, &status)
