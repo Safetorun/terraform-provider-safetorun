@@ -41,6 +41,14 @@ func (c Client) CreateOrganisation(request CreateOrganisationRequest) (*CreateOr
 
 	response, err := client.Do(r)
 
+	if err != nil {
+		return nil, err
+	}
+
+	if response == nil {
+		return nil, errors.New("unexpected response, error and response both nil")
+	}
+
 	if response.StatusCode == 401 {
 		return nil, errors.New("failed to authenticate")
 	}
