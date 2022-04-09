@@ -10,7 +10,7 @@ import (
 )
 
 const (
-	URL = "https://c9w5whh2jc.execute-api.eu-west-1.amazonaws.com/Prod"
+	URL = "https://zkx1ijlpd3.execute-api.eu-west-1.amazonaws.com/Prod/"
 )
 
 type CreateOrganisationRequest struct {
