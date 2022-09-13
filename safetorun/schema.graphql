@@ -1,0 +1,48 @@
+﻿schema {
+    query: Query
+    mutation: Mutation
+    subscription: Subscription
+}
+
+type Application {
+    ApiKey: String!
+    ApplicationId: String!
+    ApplicationName: String!
+}
+
+type ApplicationList {
+    items: [Application]
+}
+
+type Mutation {
+    createApplication(input: CreateApplication!, organisationId: String!): Application!
+    createOrganisation(adminEmail: String!, organisationId: String!, organisationName: String!): OrganisationStatus
+    deleteApplication(applicationId: String!, organisationId: String!): Application!
+    deleteOrganisation(organisationId: String!): OrganisationStatus
+    updateApplication(input: CreateApplication!, organisationId: String!): Application!
+    updateOrgCreationStatus(organisationId: String!, status: Int!, userId: String!): OrganisationStatus
+}
+
+type OrganisationStatus {
+    OrganisationId: String!
+    Status: Int!
+    UserId: String!
+}
+
+type Query {
+    getApplication(applicationId: String!): Application
+    getOrganisationStatus(organisationId: String!): OrganisationStatus
+    listApplications(organisationId: String!): ApplicationList
+}
+
+type Subscription {
+    onUpdateOrganisations(organisationId: String): OrganisationStatus
+}
+
+input CreateApplication {
+    ApplicationName: String!
+}
+
+input DeleteApplication {
+    ApplicationId: String!
+}

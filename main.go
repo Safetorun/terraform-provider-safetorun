@@ -2,7 +2,7 @@ package main
 
 import (
 	"github.com/Safetorun/safe_to_run_admin_api/safetorun"
-	"github.com/urfave/cli/v2"
+	cli "github.com/urfave/cli/v2"
 	"log"
 	"os"
 	"time"
@@ -17,23 +17,10 @@ func main() {
 	app := &cli.App{
 		Flags: []cli.Flag{
 			&cli.StringFlag{
-				Name:        "org_name",
-				Usage:       "Organisation name to create",
-				Aliases:     []string{"o"},
-				Destination: &organisationName,
-				Required:    true,
-			},
-			&cli.StringFlag{
 				Name:        "auth_token",
 				Usage:       "Token for authentication",
 				Aliases:     []string{"a"},
 				Destination: &authToken,
-				Required:    true,
-			},
-			&cli.StringFlag{
-				Name:        "admin_email",
-				Usage:       "Admin email",
-				Destination: &adminEmail,
 				Required:    true,
 			},
 			&cli.StringFlag{
@@ -42,53 +29,92 @@ func main() {
 				Required:    true,
 			},
 		},
-		Name:  "create",
-		Usage: "Create a new application on safe to run",
-		Action: func(c *cli.Context) error {
+		Commands: []*cli.Command{
+			{
+				Name:  "delete",
+				Usage: "Delete an organisation from safe to run",
+				Action: func(context *cli.Context) error {
+					client := safetorun.New(authToken)
+					_, err := client.DeleteOrganisation(organisationId)
 
-			client := safetorun.New(authToken)
-			_, err := client.CreateOrganisation(safetorun.CreateOrganisationRequest{
-				OrganisationName: organisationName,
-				OrganisationId:   organisationId,
-				AdminUser:        adminEmail,
-			})
+					if err != nil {
+						log.Fatal(err)
+						return err
+					}
 
-			if err != nil {
-				log.Fatal(err)
-			}
+					return waitForStatus(client, organisationId)
+				},
+			},
+			{
+				Name:  "create",
+				Usage: "Create a new organisation on safe to run",
+				Flags: []cli.Flag{
 
-			for {
-				re, err := client.QueryStatus(organisationName)
+					&cli.StringFlag{
+						Name:        "org_name",
+						Usage:       "Organisation name to create",
+						Aliases:     []string{"o"},
+						Destination: &organisationName,
+						Required:    true,
+					},
 
-				if err != nil {
-					log.Fatal(err)
-				}
+					&cli.StringFlag{
+						Name:        "admin_email",
+						Usage:       "Admin email",
+						Destination: &adminEmail,
+						Required:    true,
+					},
+				},
+				Action: func(c *cli.Context) error {
+					client := safetorun.New(authToken)
+					_, err := client.CreateOrganisation(safetorun.CreateOrganisationRequest{
+						OrganisationName: organisationName,
+						OrganisationId:   organisationId,
+						AdminUser:        adminEmail,
+					})
 
-				switch re.Status {
-				case safetorun.CreateInProgress:
-					time.Sleep(time.Second)
-					break
-				case safetorun.InfrastructureCreated:
-					println("Create complete")
-					return nil
+					if err != nil {
+						log.Fatal(err)
+					}
 
-				case safetorun.ErrorDestroying:
-					println("Something went wrong, destroying.")
-					time.Sleep(time.Second)
-					break
-				case safetorun.DeleteComplete:
-					println("Delete complete.")
-					return nil
-				case safetorun.AlreadyExists:
-					println("Org already exists")
-					return nil
-				}
-			}
+					return waitForStatus(client, organisationId)
+				},
+			},
 		},
 	}
-
 	err := app.Run(os.Args)
 	if err != nil {
 		log.Fatal(err)
+	}
+
+}
+
+func waitForStatus(client safetorun.Client, organisationId string) error {
+	for {
+		re, err := client.QueryStatus(organisationId)
+
+		if err != nil {
+			log.Fatal(err)
+		}
+
+		switch re.Status {
+		case safetorun.CreateInProgress:
+			time.Sleep(time.Second)
+			break
+		case safetorun.InfrastructureCreated:
+			println("Create complete")
+			return nil
+
+		case safetorun.ErrorDestroying:
+			println("Something went wrong, destroying.")
+			time.Sleep(time.Second)
+			break
+		case safetorun.DeleteComplete:
+			println("Delete complete.")
+			return nil
+		case safetorun.AlreadyExists:
+			println("Org already exists")
+			return nil
+		}
 	}
 }

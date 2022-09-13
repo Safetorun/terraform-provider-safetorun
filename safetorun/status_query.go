@@ -2,8 +2,6 @@ package safetorun
 
 import (
 	"context"
-	"fmt"
-	"github.com/machinebox/graphql"
 )
 
 type OrgStatusResult struct {
@@ -17,34 +15,22 @@ type OrganisationStatus struct {
 type CreateStatus int
 
 const (
-	CreateInProgress      CreateStatus = iota
-	InfrastructureCreated              = iota
-	ErrorDestroying                    = iota
-	DeleteComplete                     = iota
-	AlreadyExists                      = iota
+	CreateInProgress      = iota
+	InfrastructureCreated = iota
+	ErrorDestroying       = iota
+	DeleteComplete        = iota
+	AlreadyExists         = iota
 )
 
-func (c Client) QueryStatus(organisationName string) (*OrganisationStatus, error) {
-	query := fmt.Sprintf(`query MyQuery {
-		  getOrganisationStatus(organisationName: "%s") {
-			OrganisationName
-			Status
-		  }
-		}
-		`, organisationName)
+func (c Client) QueryStatus(organisationId string) (*GetForOrganisationIdGetOrganisationStatus, error) {
+	ctx := context.Background()
 
-	req := graphql.NewRequest(query)
-	url := "https://ulhdaocpgfewxmt7xxf55l6mzm.appsync-api.eu-west-1.amazonaws.com/graphql"
-	client := graphql.NewClient(url)
-	req.Header.Set("Authorization", c.AuthToken)
-
-	var status OrgStatusResult
-	err := client.Run(context.Background(), req, &status)
+	response, err := GetForOrganisationId(ctx, c.GqlClient, organisationId)
 
 	if err != nil {
 		return nil, err
 	}
 
-	return &status.GetOrganisationStatus, nil
-
+	status := response.GetGetOrganisationStatus()
+	return &status, err
 }
