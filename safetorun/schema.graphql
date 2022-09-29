@@ -14,23 +14,31 @@ type ApplicationList {
     items: [Application]
 }
 
+type CreateApplicationResponse {
+    ApplicationId: String!
+}
+
+type DeleteApplicationResponse {
+    ApplicationId: String!
+}
+
 type Mutation {
-    createApplication(input: CreateApplication!, organisationId: String!): Application!
+    createApplication(input: CreateApplication!, organisationId: String!): CreateApplicationResponse!
     createOrganisation(adminEmail: String!, organisationId: String!, organisationName: String!): OrganisationStatus
-    deleteApplication(applicationId: String!, organisationId: String!): Application!
+    deleteApplication(applicationId: String!, organisationId: String!): DeleteApplicationResponse!
     deleteOrganisation(organisationId: String!): OrganisationStatus
-    updateApplication(input: CreateApplication!, organisationId: String!): Application!
+    updateApplication(applicationId: String!, input: CreateApplication!, organisationId: String!): CreateApplicationResponse!
     updateOrgCreationStatus(organisationId: String!, status: Int!, userId: String!): OrganisationStatus
 }
 
-type OrganisationStatus {
+type OrganisationStatus  {
     OrganisationId: String!
     Status: Int!
     UserId: String!
 }
 
-type Query {
-    getApplication(applicationId: String!): Application
+type Query  {
+    getApplication(applicationId: String!, organisationId: String!): Application
     getOrganisationStatus(organisationId: String!): OrganisationStatus
     listApplications(organisationId: String!): ApplicationList
 }

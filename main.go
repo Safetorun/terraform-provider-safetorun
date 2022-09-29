@@ -10,6 +10,8 @@ import (
 
 func main() {
 	var organisationName string
+	var applicationName string
+	var applicationId string
 	var authToken string
 	var organisationId string
 	var adminEmail string
@@ -43,6 +45,60 @@ func main() {
 					}
 
 					return waitForStatus(client, organisationId)
+				},
+			},
+			{
+				Name:  "create-app",
+				Usage: "Create a new application on safe to run",
+				Flags: []cli.Flag{
+
+					&cli.StringFlag{
+						Name:        "application_name",
+						Usage:       "Application name to create",
+						Aliases:     []string{"a"},
+						Destination: &applicationName,
+						Required:    true,
+					},
+				},
+				Action: func(c *cli.Context) error {
+					client := safetorun.New(authToken)
+					_, err := client.CreateApplication(safetorun.CreateApplicationRequest{
+						OrganisationId:  organisationId,
+						ApplicationName: applicationName,
+					})
+
+					if err != nil {
+						log.Fatal(err)
+					}
+
+					return err
+				},
+			},
+			{
+				Name:  "delete-app",
+				Usage: "delete a new application on safe to run",
+				Flags: []cli.Flag{
+
+					&cli.StringFlag{
+						Name:        "application_id",
+						Usage:       "Application name to create",
+						Aliases:     []string{"aid"},
+						Destination: &applicationId,
+						Required:    true,
+					},
+				},
+				Action: func(c *cli.Context) error {
+					client := safetorun.New(authToken)
+					_, err := client.DeleteApplication(safetorun.DeleteApplicationRequest{
+						OrganisationId: organisationId,
+						ApplicationId:  applicationId,
+					})
+
+					if err != nil {
+						log.Fatal(err)
+					}
+
+					return err
 				},
 			},
 			{

@@ -1,27 +1,53 @@
-mutation CreateOrganisation($adminEmail :String!, $organisationId :String!, $organisationName :String!) {
+mutation UpdateOrganisation($organisationId:String!, $organisationName :String!) {
+
+}
+
+mutation CreateOrganisation($adminEmail: String!, $organisationId: String!, $organisationName: String!) {
     createOrganisation(adminEmail: $adminEmail, organisationId: $organisationId, organisationName: $organisationName) {
         OrganisationId
         Status
     }
 }
 
-mutation Delete($organisationId: String!) {
-    deleteOrganisation(organisationId: $organisationId) {
+query GetForOrganisationId($organisationId: String!) {
+    getOrganisationStatus(organisationId: $organisationId) {
         OrganisationId
         Status
     }
 }
 
-#subscription OrganisationSubscription($organisationId: String!) {
-#    onUpdateOrganisations(organisationId: $organisationId) {
-#        Status
-#        OrganisationId
-#    }
-#}
+mutation CreateApplication($organisationId: String!, $applicationName: String!) {
+    createApplication(input: {ApplicationName: $applicationName}, organisationId: $organisationId) {
+        ApplicationId
+    }
+}
 
-query GetForOrganisationId($organisationId : String!) {
-    getOrganisationStatus(organisationId: $organisationId) {
-        OrganisationId
-        Status
+mutation DeleteApplication($organisationId: String!, $applicationId: String!) {
+    deleteApplication(organisationId: $organisationId, applicationId: $applicationId) {
+        ApplicationId
+    }
+}
+
+query GetApplications($organisationId: String!) {
+    listApplications(organisationId: $organisationId) {
+        items {
+            ApplicationId
+            ApplicationName
+            ApiKey
+        }
+    }
+}
+
+query GetApplication($organisationId: String!, $applicationId: String!) {
+    getApplication(applicationId: $applicationId, organisationId: $organisationId) {
+        ApplicationId
+        ApplicationName
+        ApiKey
+    }
+}
+
+mutation UpdateApplication($organisationId :String!, $applicationId:String!) {
+    updateApplication(input: {ApplicationName: "New app name"}, organisationId: $organisationId, applicationId:$applicationId) {
+        ApplicationId
     }
 }
