@@ -60,7 +60,7 @@ require (
 	github.com/posener/complete v1.2.1 // indirect
 	github.com/spf13/afero v1.2.2 // indirect
 	github.com/ulikunitz/xz v0.5.8 // indirect
-	github.com/vektah/gqlparser/v2 v2.4.5 // indirect
+	github.com/vektah/gqlparser/v2 v2.5.1 // indirect
 	github.com/vmihailenco/msgpack/v4 v4.3.12 // indirect
 	github.com/vmihailenco/tagparser v0.1.1 // indirect
 	github.com/zclconf/go-cty v1.8.2 // indirect
