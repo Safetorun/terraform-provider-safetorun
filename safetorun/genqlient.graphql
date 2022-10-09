@@ -1,7 +1,3 @@
-mutation UpdateOrganisation($organisationId:String!, $organisationName :String!) {
-
-}
-
 mutation CreateOrganisation($adminEmail: String!, $organisationId: String!, $organisationName: String!) {
     createOrganisation(adminEmail: $adminEmail, organisationId: $organisationId, organisationName: $organisationName) {
         OrganisationId
@@ -22,6 +18,18 @@ mutation CreateApplication($organisationId: String!, $applicationName: String!) 
     }
 }
 
+mutation DeleteOrganisation($organisationId:String!) {
+    deleteOrganisation(organisationId: $organisationId) {
+        OrganisationId
+    }
+}
+
+mutation UpdateApplication($organisationId: String!, $applicationId: String!, $applicationName : String!) {
+    updateApplication(organisationId: $organisationId, applicationId: $applicationId, input: {ApplicationName: $applicationName}) {
+        ApplicationId
+    }
+}
+
 mutation DeleteApplication($organisationId: String!, $applicationId: String!) {
     deleteApplication(organisationId: $organisationId, applicationId: $applicationId) {
         ApplicationId
@@ -36,6 +44,12 @@ query GetApplications($organisationId: String!) {
             ApiKey
         }
     }
+    listEvents {
+        items {
+            EventId
+            Time
+        }
+    }
 }
 
 query GetApplication($organisationId: String!, $applicationId: String!) {
@@ -46,8 +60,29 @@ query GetApplication($organisationId: String!, $applicationId: String!) {
     }
 }
 
-mutation UpdateApplication($organisationId :String!, $applicationId:String!) {
-    updateApplication(input: {ApplicationName: "New app name"}, organisationId: $organisationId, applicationId:$applicationId) {
-        ApplicationId
+query ListEvents {
+    listEvents {
+        items {
+            EventId
+            Time
+        }
+    }
+}
+
+mutation CreateEvent($event: String!, $userId: String!, $status: Int!, $linkId: String!) {
+    createEvent(event: $event, userId: $userId, status: $status, linkId: $linkId) {
+        EventId
+        Time
+        Status
+    }
+}
+
+query GetEventsForLinkId($linkId:String!) {
+    eventsForLinkId(linkId:$linkId) {
+        items {
+            EventId
+            Time
+            Status
+        }
     }
 }

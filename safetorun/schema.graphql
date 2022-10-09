@@ -1,56 +1,77 @@
-﻿schema {
-    query: Query
-    mutation: Mutation
-    subscription: Subscription
-}
-
-type Application {
-    ApiKey: String!
+﻿type Application {
     ApplicationId: String!
     ApplicationName: String!
+    ApiKey: String!
 }
 
 type ApplicationList {
     items: [Application]
 }
 
-type CreateApplicationResponse {
+input CreateApplication {
+    ApplicationName: String!
+}
+
+type CreateApplicationResponse{
     ApplicationId: String!
 }
 
-type DeleteApplicationResponse {
+input DeleteApplication {
     ApplicationId: String!
+}
+
+type DeleteApplicationResponse  {
+    ApplicationId: String!
+}
+
+type Event {
+    EventId: String!
+    LinkId: String!
+    Time: Int!
+    Status: Int!
+}
+
+type Events {
+    items: [Event]
 }
 
 type Mutation {
-    createApplication(input: CreateApplication!, organisationId: String!): CreateApplicationResponse!
-    createOrganisation(adminEmail: String!, organisationId: String!, organisationName: String!): OrganisationStatus
-    deleteApplication(applicationId: String!, organisationId: String!): DeleteApplicationResponse!
+    updateOrgCreationStatus(userId: String!, organisationId: String!, status: Int!): OrganisationStatus
     deleteOrganisation(organisationId: String!): OrganisationStatus
-    updateApplication(applicationId: String!, input: CreateApplication!, organisationId: String!): CreateApplicationResponse!
-    updateOrgCreationStatus(organisationId: String!, status: Int!, userId: String!): OrganisationStatus
+    createOrganisation(organisationId: String!, adminEmail: String!, organisationName: String!): OrganisationStatus
+    updateOrganisation(organisationId: String!, organisationName: String!): OrganisationStatus
+    deleteApplication(organisationId: String!, applicationId: String!): DeleteApplicationResponse!
+    createApplication(organisationId: String!, input: CreateApplication!): CreateApplicationResponse!
+    updateApplication(organisationId: String!, applicationId: String!, input: CreateApplication!): CreateApplicationResponse!
+    createEvent(
+        event: String!,
+        userId: String!,
+        status: Int!,
+        linkId: String!
+    ): Event!
+    createOrganisationToken(input: OrganisationToken!): String!
 }
 
-type OrganisationStatus  {
+type OrganisationStatus {
     OrganisationId: String!
     Status: Int!
     UserId: String!
 }
 
-type Query  {
-    getApplication(applicationId: String!, organisationId: String!): Application
+input OrganisationToken {
+    OrganisationId: String!
+    CreateApplications: Boolean!
+    CreateOrganisation: Boolean!
+    DeleteOrganisation: Boolean!
+    DeleteApplications: Boolean!
+    UpdateApplication: Boolean!
+    ReadApplications: Boolean!
+}
+
+type Query {
     getOrganisationStatus(organisationId: String!): OrganisationStatus
+    getApplication(applicationId: String!, organisationId: String!): Application
     listApplications(organisationId: String!): ApplicationList
-}
-
-type Subscription {
-    onUpdateOrganisations(organisationId: String): OrganisationStatus
-}
-
-input CreateApplication {
-    ApplicationName: String!
-}
-
-input DeleteApplication {
-    ApplicationId: String!
+    listEvents: Events
+    eventsForLinkId(linkId: String!): Events
 }

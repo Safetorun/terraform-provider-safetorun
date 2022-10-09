@@ -9,7 +9,7 @@ import (
 	"time"
 )
 
-const OrganisationId = "organisationId"
+const OrganisationId = "organisation_id"
 
 func organisationData() *schema.Resource {
 	return &schema.Resource{

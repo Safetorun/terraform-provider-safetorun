@@ -1,7 +1,6 @@
 package safetorun
 
 import (
-	"fmt"
 	"github.com/Khan/genqlient/graphql"
 	"net/http"
 )
@@ -15,7 +14,7 @@ type myTransport struct {
 }
 
 func (t *myTransport) RoundTrip(req *http.Request) (*http.Response, error) {
-	req.Header.Add("Authorization", fmt.Sprintf("Bearer %s", t.Header))
+	req.Header.Add("Authorization", t.Header)
 	return http.DefaultTransport.RoundTrip(req)
 }
 

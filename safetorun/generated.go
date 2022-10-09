@@ -28,6 +28,30 @@ func (v *CreateApplicationResponse) GetCreateApplication() CreateApplicationCrea
 	return v.CreateApplication
 }
 
+// CreateEventCreateEvent includes the requested fields of the GraphQL type Event.
+type CreateEventCreateEvent struct {
+	EventId string `json:"EventId"`
+	Time    int    `json:"Time"`
+	Status  int    `json:"Status"`
+}
+
+// GetEventId returns CreateEventCreateEvent.EventId, and is useful for accessing the field via an interface.
+func (v *CreateEventCreateEvent) GetEventId() string { return v.EventId }
+
+// GetTime returns CreateEventCreateEvent.Time, and is useful for accessing the field via an interface.
+func (v *CreateEventCreateEvent) GetTime() int { return v.Time }
+
+// GetStatus returns CreateEventCreateEvent.Status, and is useful for accessing the field via an interface.
+func (v *CreateEventCreateEvent) GetStatus() int { return v.Status }
+
+// CreateEventResponse is returned by CreateEvent on success.
+type CreateEventResponse struct {
+	CreateEvent CreateEventCreateEvent `json:"createEvent"`
+}
+
+// GetCreateEvent returns CreateEventResponse.CreateEvent, and is useful for accessing the field via an interface.
+func (v *CreateEventResponse) GetCreateEvent() CreateEventCreateEvent { return v.CreateEvent }
+
 // CreateOrganisationCreateOrganisationOrganisationStatus includes the requested fields of the GraphQL type OrganisationStatus.
 type CreateOrganisationCreateOrganisationOrganisationStatus struct {
 	OrganisationId string `json:"OrganisationId"`
@@ -150,14 +174,74 @@ func (v *GetApplicationsListApplicationsApplicationListItemsApplication) GetApiK
 	return v.ApiKey
 }
 
+// GetApplicationsListEvents includes the requested fields of the GraphQL type Events.
+type GetApplicationsListEvents struct {
+	Items []GetApplicationsListEventsItemsEvent `json:"items"`
+}
+
+// GetItems returns GetApplicationsListEvents.Items, and is useful for accessing the field via an interface.
+func (v *GetApplicationsListEvents) GetItems() []GetApplicationsListEventsItemsEvent { return v.Items }
+
+// GetApplicationsListEventsItemsEvent includes the requested fields of the GraphQL type Event.
+type GetApplicationsListEventsItemsEvent struct {
+	EventId string `json:"EventId"`
+	Time    int    `json:"Time"`
+}
+
+// GetEventId returns GetApplicationsListEventsItemsEvent.EventId, and is useful for accessing the field via an interface.
+func (v *GetApplicationsListEventsItemsEvent) GetEventId() string { return v.EventId }
+
+// GetTime returns GetApplicationsListEventsItemsEvent.Time, and is useful for accessing the field via an interface.
+func (v *GetApplicationsListEventsItemsEvent) GetTime() int { return v.Time }
+
 // GetApplicationsResponse is returned by GetApplications on success.
 type GetApplicationsResponse struct {
 	ListApplications GetApplicationsListApplicationsApplicationList `json:"listApplications"`
+	ListEvents       GetApplicationsListEvents                      `json:"listEvents"`
 }
 
 // GetListApplications returns GetApplicationsResponse.ListApplications, and is useful for accessing the field via an interface.
 func (v *GetApplicationsResponse) GetListApplications() GetApplicationsListApplicationsApplicationList {
 	return v.ListApplications
+}
+
+// GetListEvents returns GetApplicationsResponse.ListEvents, and is useful for accessing the field via an interface.
+func (v *GetApplicationsResponse) GetListEvents() GetApplicationsListEvents { return v.ListEvents }
+
+// GetEventsForLinkIdEventsForLinkIdEvents includes the requested fields of the GraphQL type Events.
+type GetEventsForLinkIdEventsForLinkIdEvents struct {
+	Items []GetEventsForLinkIdEventsForLinkIdEventsItemsEvent `json:"items"`
+}
+
+// GetItems returns GetEventsForLinkIdEventsForLinkIdEvents.Items, and is useful for accessing the field via an interface.
+func (v *GetEventsForLinkIdEventsForLinkIdEvents) GetItems() []GetEventsForLinkIdEventsForLinkIdEventsItemsEvent {
+	return v.Items
+}
+
+// GetEventsForLinkIdEventsForLinkIdEventsItemsEvent includes the requested fields of the GraphQL type Event.
+type GetEventsForLinkIdEventsForLinkIdEventsItemsEvent struct {
+	EventId string `json:"EventId"`
+	Time    int    `json:"Time"`
+	Status  int    `json:"Status"`
+}
+
+// GetEventId returns GetEventsForLinkIdEventsForLinkIdEventsItemsEvent.EventId, and is useful for accessing the field via an interface.
+func (v *GetEventsForLinkIdEventsForLinkIdEventsItemsEvent) GetEventId() string { return v.EventId }
+
+// GetTime returns GetEventsForLinkIdEventsForLinkIdEventsItemsEvent.Time, and is useful for accessing the field via an interface.
+func (v *GetEventsForLinkIdEventsForLinkIdEventsItemsEvent) GetTime() int { return v.Time }
+
+// GetStatus returns GetEventsForLinkIdEventsForLinkIdEventsItemsEvent.Status, and is useful for accessing the field via an interface.
+func (v *GetEventsForLinkIdEventsForLinkIdEventsItemsEvent) GetStatus() int { return v.Status }
+
+// GetEventsForLinkIdResponse is returned by GetEventsForLinkId on success.
+type GetEventsForLinkIdResponse struct {
+	EventsForLinkId GetEventsForLinkIdEventsForLinkIdEvents `json:"eventsForLinkId"`
+}
+
+// GetEventsForLinkId returns GetEventsForLinkIdResponse.EventsForLinkId, and is useful for accessing the field via an interface.
+func (v *GetEventsForLinkIdResponse) GetEventsForLinkId() GetEventsForLinkIdEventsForLinkIdEvents {
+	return v.EventsForLinkId
 }
 
 // GetForOrganisationIdGetOrganisationStatus includes the requested fields of the GraphQL type OrganisationStatus.
@@ -183,6 +267,34 @@ type GetForOrganisationIdResponse struct {
 func (v *GetForOrganisationIdResponse) GetGetOrganisationStatus() GetForOrganisationIdGetOrganisationStatus {
 	return v.GetOrganisationStatus
 }
+
+// ListEventsListEvents includes the requested fields of the GraphQL type Events.
+type ListEventsListEvents struct {
+	Items []ListEventsListEventsItemsEvent `json:"items"`
+}
+
+// GetItems returns ListEventsListEvents.Items, and is useful for accessing the field via an interface.
+func (v *ListEventsListEvents) GetItems() []ListEventsListEventsItemsEvent { return v.Items }
+
+// ListEventsListEventsItemsEvent includes the requested fields of the GraphQL type Event.
+type ListEventsListEventsItemsEvent struct {
+	EventId string `json:"EventId"`
+	Time    int    `json:"Time"`
+}
+
+// GetEventId returns ListEventsListEventsItemsEvent.EventId, and is useful for accessing the field via an interface.
+func (v *ListEventsListEventsItemsEvent) GetEventId() string { return v.EventId }
+
+// GetTime returns ListEventsListEventsItemsEvent.Time, and is useful for accessing the field via an interface.
+func (v *ListEventsListEventsItemsEvent) GetTime() int { return v.Time }
+
+// ListEventsResponse is returned by ListEvents on success.
+type ListEventsResponse struct {
+	ListEvents ListEventsListEvents `json:"listEvents"`
+}
+
+// GetListEvents returns ListEventsResponse.ListEvents, and is useful for accessing the field via an interface.
+func (v *ListEventsResponse) GetListEvents() ListEventsListEvents { return v.ListEvents }
 
 // UpdateApplicationResponse is returned by UpdateApplication on success.
 type UpdateApplicationResponse struct {
@@ -215,6 +327,26 @@ func (v *__CreateApplicationInput) GetOrganisationId() string { return v.Organis
 
 // GetApplicationName returns __CreateApplicationInput.ApplicationName, and is useful for accessing the field via an interface.
 func (v *__CreateApplicationInput) GetApplicationName() string { return v.ApplicationName }
+
+// __CreateEventInput is used internally by genqlient
+type __CreateEventInput struct {
+	Event  string `json:"event"`
+	UserId string `json:"userId"`
+	Status int    `json:"status"`
+	LinkId string `json:"linkId"`
+}
+
+// GetEvent returns __CreateEventInput.Event, and is useful for accessing the field via an interface.
+func (v *__CreateEventInput) GetEvent() string { return v.Event }
+
+// GetUserId returns __CreateEventInput.UserId, and is useful for accessing the field via an interface.
+func (v *__CreateEventInput) GetUserId() string { return v.UserId }
+
+// GetStatus returns __CreateEventInput.Status, and is useful for accessing the field via an interface.
+func (v *__CreateEventInput) GetStatus() int { return v.Status }
+
+// GetLinkId returns __CreateEventInput.LinkId, and is useful for accessing the field via an interface.
+func (v *__CreateEventInput) GetLinkId() string { return v.LinkId }
 
 // __CreateOrganisationInput is used internally by genqlient
 type __CreateOrganisationInput struct {
@@ -272,6 +404,14 @@ type __GetApplicationsInput struct {
 // GetOrganisationId returns __GetApplicationsInput.OrganisationId, and is useful for accessing the field via an interface.
 func (v *__GetApplicationsInput) GetOrganisationId() string { return v.OrganisationId }
 
+// __GetEventsForLinkIdInput is used internally by genqlient
+type __GetEventsForLinkIdInput struct {
+	LinkId string `json:"linkId"`
+}
+
+// GetLinkId returns __GetEventsForLinkIdInput.LinkId, and is useful for accessing the field via an interface.
+func (v *__GetEventsForLinkIdInput) GetLinkId() string { return v.LinkId }
+
 // __GetForOrganisationIdInput is used internally by genqlient
 type __GetForOrganisationIdInput struct {
 	OrganisationId string `json:"organisationId"`
@@ -319,6 +459,46 @@ mutation CreateApplication ($organisationId: String!, $applicationName: String!)
 	var err error
 
 	var data CreateApplicationResponse
+	resp := &graphql.Response{Data: &data}
+
+	err = client.MakeRequest(
+		ctx,
+		req,
+		resp,
+	)
+
+	return &data, err
+}
+
+func CreateEvent(
+	ctx context.Context,
+	client graphql.Client,
+	event string,
+	userId string,
+	status int,
+	linkId string,
+) (*CreateEventResponse, error) {
+	req := &graphql.Request{
+		OpName: "CreateEvent",
+		Query: `
+mutation CreateEvent ($event: String!, $userId: String!, $status: Int!, $linkId: String!) {
+	createEvent(event: $event, userId: $userId, status: $status, linkId: $linkId) {
+		EventId
+		Time
+		Status
+	}
+}
+`,
+		Variables: &__CreateEventInput{
+			Event:  event,
+			UserId: userId,
+			Status: status,
+			LinkId: linkId,
+		},
+	}
+	var err error
+
+	var data CreateEventResponse
 	resp := &graphql.Response{Data: &data}
 
 	err = client.MakeRequest(
@@ -485,6 +665,12 @@ query GetApplications ($organisationId: String!) {
 			ApiKey
 		}
 	}
+	listEvents {
+		items {
+			EventId
+			Time
+		}
+	}
 }
 `,
 		Variables: &__GetApplicationsInput{
@@ -494,6 +680,42 @@ query GetApplications ($organisationId: String!) {
 	var err error
 
 	var data GetApplicationsResponse
+	resp := &graphql.Response{Data: &data}
+
+	err = client.MakeRequest(
+		ctx,
+		req,
+		resp,
+	)
+
+	return &data, err
+}
+
+func GetEventsForLinkId(
+	ctx context.Context,
+	client graphql.Client,
+	linkId string,
+) (*GetEventsForLinkIdResponse, error) {
+	req := &graphql.Request{
+		OpName: "GetEventsForLinkId",
+		Query: `
+query GetEventsForLinkId ($linkId: String!) {
+	eventsForLinkId(linkId: $linkId) {
+		items {
+			EventId
+			Time
+			Status
+		}
+	}
+}
+`,
+		Variables: &__GetEventsForLinkIdInput{
+			LinkId: linkId,
+		},
+	}
+	var err error
+
+	var data GetEventsForLinkIdResponse
 	resp := &graphql.Response{Data: &data}
 
 	err = client.MakeRequest(
@@ -538,6 +760,37 @@ query GetForOrganisationId ($organisationId: String!) {
 	return &data, err
 }
 
+func ListEvents(
+	ctx context.Context,
+	client graphql.Client,
+) (*ListEventsResponse, error) {
+	req := &graphql.Request{
+		OpName: "ListEvents",
+		Query: `
+query ListEvents {
+	listEvents {
+		items {
+			EventId
+			Time
+		}
+	}
+}
+`,
+	}
+	var err error
+
+	var data ListEventsResponse
+	resp := &graphql.Response{Data: &data}
+
+	err = client.MakeRequest(
+		ctx,
+		req,
+		resp,
+	)
+
+	return &data, err
+}
+
 func UpdateApplication(
 	ctx context.Context,
 	client graphql.Client,
@@ -549,7 +802,7 @@ func UpdateApplication(
 		OpName: "UpdateApplication",
 		Query: `
 mutation UpdateApplication ($organisationId: String!, $applicationId: String!, $applicationName: String!) {
-	updateApplication(input: {ApplicationName:$applicationName}, organisationId: $organisationId, applicationId: $applicationId) {
+	updateApplication(organisationId: $organisationId, applicationId: $applicationId, input: {ApplicationName:$applicationName}) {
 		ApplicationId
 	}
 }
