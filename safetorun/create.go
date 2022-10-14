@@ -15,11 +15,11 @@ type CreateOrganisationResp struct {
 	OrganisationId string
 }
 
-func (c Client) CreateOrganisation(request CreateOrganisationRequest) (*CreateOrganisationResp, error) {
+func (client Client) CreateOrganisation(request CreateOrganisationRequest) (*CreateOrganisationResp, error) {
 
 	ctx := context.Background()
 
-	response, err := CreateOrganisation(ctx, c.GqlClient, request.AdminUser, request.OrganisationId, request.OrganisationName)
+	response, err := CreateOrganisation(ctx, client.GqlClient, request.AdminUser, request.OrganisationId, request.OrganisationName)
 
 	if err != nil {
 		return nil, err

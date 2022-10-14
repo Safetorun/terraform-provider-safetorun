@@ -2,10 +2,10 @@ package safetorun
 
 import "context"
 
-func (c Client) DeleteOrganisation(organisationId string) (*DeleteOrganisationDeleteOrganisationOrganisationStatus, error) {
+func (client Client) DeleteOrganisation(organisationId string) (*DeleteOrganisationDeleteOrganisationOrganisationStatus, error) {
 	ctx := context.Background()
 
-	response, err := DeleteOrganisation(ctx, c.GqlClient, organisationId)
+	response, err := DeleteOrganisation(ctx, client.GqlClient, organisationId)
 
 	if err != nil {
 		return nil, err

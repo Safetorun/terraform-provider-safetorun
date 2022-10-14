@@ -15,12 +15,12 @@ type DeleteApplicationResp struct {
 	ApplicationId string
 }
 
-func (c Client) DeleteApplication(request DeleteApplicationRequest) (*DeleteApplicationResp, error) {
+func (client Client) DeleteApplication(request DeleteApplicationRequest) (*DeleteApplicationResp, error) {
 
 	ctx := context.Background()
 
 	log.Println(fmt.Sprintf("Going to delete applciation with organisation ID: %s and application ID: %s", request.OrganisationId, request.ApplicationId))
-	response, err := DeleteApplication(ctx, c.GqlClient, request.OrganisationId, request.ApplicationId)
+	response, err := DeleteApplication(ctx, client.GqlClient, request.OrganisationId, request.ApplicationId)
 
 	if err != nil {
 		return nil, err

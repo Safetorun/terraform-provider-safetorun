@@ -1,6 +1,6 @@
 module github.com/Safetorun/safe_to_run_admin_api/safetorun
 
-go 1.18
+go 1.19
 
 require github.com/Khan/genqlient v0.5.0
 

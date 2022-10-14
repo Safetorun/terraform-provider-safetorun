@@ -69,14 +69,6 @@ query ListEvents {
     }
 }
 
-mutation CreateEvent($event: String!, $userId: String!, $status: Int!, $linkId: String!) {
-    createEvent(event: $event, userId: $userId, status: $status, linkId: $linkId) {
-        EventId
-        Time
-        Status
-    }
-}
-
 query GetEventsForLinkId($linkId:String!) {
     eventsForLinkId(linkId:$linkId) {
         items {

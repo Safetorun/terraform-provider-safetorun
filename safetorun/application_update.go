@@ -2,10 +2,10 @@ package safetorun
 
 import "context"
 
-func (c Client) UpdateApplication(organisationId string, applicationId string, applicationName string) (*UpdateApplicationUpdateApplicationCreateApplicationResponse, error) {
+func (client Client) UpdateApplication(organisationId string, applicationId string, applicationName string) (*UpdateApplicationUpdateApplicationCreateApplicationResponse, error) {
 	ctx := context.Background()
 
-	response, err := UpdateApplication(ctx, c.GqlClient, organisationId, applicationId, applicationName)
+	response, err := UpdateApplication(ctx, client.GqlClient, organisationId, applicationId, applicationName)
 
 	if err != nil {
 		return nil, err

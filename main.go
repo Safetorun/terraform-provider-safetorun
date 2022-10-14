@@ -1,11 +1,11 @@
 package main
 
 import (
+	"fmt"
 	"github.com/Safetorun/safe_to_run_admin_api/safetorun"
-	cli "github.com/urfave/cli/v2"
+	"github.com/urfave/cli/v2"
 	"log"
 	"os"
-	"time"
 )
 
 func main() {
@@ -17,6 +17,7 @@ func main() {
 	var adminEmail string
 
 	app := &cli.App{
+		EnableBashCompletion: true,
 		Flags: []cli.Flag{
 			&cli.StringFlag{
 				Name:        "auth_token",
@@ -33,7 +34,39 @@ func main() {
 		},
 		Commands: []*cli.Command{
 			{
-				Name:  "delete",
+				Name:  "list-apps",
+				Usage: "List applications",
+				Action: func(context *cli.Context) error {
+					client := safetorun.New(authToken)
+					event, err := client.ListApplications(organisationId)
+
+					if err != nil {
+						log.Fatal(err)
+						return err
+					}
+
+					log.Println(fmt.Sprintf("%+v", event))
+					return nil
+				},
+			},
+			{
+				Name:  "latest_event",
+				Usage: "Latest event",
+				Action: func(context *cli.Context) error {
+					client := safetorun.New(authToken)
+					event, err := client.RetrieveLastEventForLinkId(organisationId)
+
+					if err != nil {
+						log.Fatal(err)
+						return err
+					}
+
+					log.Println(fmt.Sprintf("%+v", event))
+					return nil
+				},
+			},
+			{
+				Name:  "delete-org",
 				Usage: "Delete an organisation from safe to run",
 				Action: func(context *cli.Context) error {
 					client := safetorun.New(authToken)
@@ -44,7 +77,7 @@ func main() {
 						return err
 					}
 
-					return waitForStatus(client, organisationId)
+					return client.WaitForCompletion(organisationId)
 				},
 			},
 			{
@@ -71,7 +104,7 @@ func main() {
 						log.Fatal(err)
 					}
 
-					return err
+					return client.WaitForCompletion(organisationId)
 				},
 			},
 			{
@@ -102,7 +135,7 @@ func main() {
 				},
 			},
 			{
-				Name:  "create",
+				Name:  "create-org",
 				Usage: "Create a new organisation on safe to run",
 				Flags: []cli.Flag{
 
@@ -133,7 +166,7 @@ func main() {
 						log.Fatal(err)
 					}
 
-					return waitForStatus(client, organisationId)
+					return client.WaitForCompletion(organisationId)
 				},
 			},
 		},
@@ -143,34 +176,4 @@ func main() {
 		log.Fatal(err)
 	}
 
-}
-
-func waitForStatus(client safetorun.Client, organisationId string) error {
-	for {
-		re, err := client.QueryStatus(organisationId)
-
-		if err != nil {
-			log.Fatal(err)
-		}
-
-		switch re.Status {
-		case safetorun.CreateInProgress:
-			time.Sleep(time.Second)
-			break
-		case safetorun.InfrastructureCreated:
-			println("Create complete")
-			return nil
-
-		case safetorun.ErrorDestroying:
-			println("Something went wrong, destroying.")
-			time.Sleep(time.Second)
-			break
-		case safetorun.DeleteComplete:
-			println("Delete complete.")
-			return nil
-		case safetorun.AlreadyExists:
-			println("Org already exists")
-			return nil
-		}
-	}
 }

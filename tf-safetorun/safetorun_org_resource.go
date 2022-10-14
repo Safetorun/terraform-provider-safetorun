@@ -2,11 +2,9 @@
 package main
 
 import (
-	"errors"
 	"github.com/Safetorun/safe_to_run_admin_api/safetorun"
 	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
 	"log"
-	"time"
 )
 
 const OrganisationId = "organisation_id"
@@ -75,7 +73,7 @@ func organisationCreate(d *schema.ResourceData, m interface{}) error {
 		return err
 	}
 
-	err = waitForStatus(m.(SafeToRunProvider).Client, organisationId, false)
+	err = m.(SafeToRunProvider).Client.WaitForCompletion(organisationId)
 
 	if err != nil {
 		return err
@@ -117,37 +115,5 @@ func resourceServerDelete(d *schema.ResourceData, m interface{}) error {
 	}
 	d.SetId(response.OrganisationId)
 
-	return waitForStatus(m.(SafeToRunProvider).Client, organisationId, true)
-}
-
-func waitForStatus(client safetorun.Client, organisationId string, isDelete bool) error {
-	for {
-		re, err := client.QueryStatus(organisationId)
-
-		if err != nil {
-			log.Fatal(err)
-		}
-
-		switch re.Status {
-		case safetorun.CreateInProgress:
-			time.Sleep(time.Second)
-			break
-		case safetorun.InfrastructureCreated:
-			println("Create complete")
-			return nil
-		case safetorun.ErrorDestroying:
-			println("Something went wrong, destroying.")
-			time.Sleep(time.Second)
-			break
-		case safetorun.DeleteComplete:
-			println("Delete complete.")
-			if isDelete {
-				return nil
-			}
-			return errors.New("delete complete")
-		case safetorun.AlreadyExists:
-			println("Org already exists")
-			return errors.New("org already exists")
-		}
-	}
+	return m.(SafeToRunProvider).Client.WaitForCompletion(organisationId)
 }
