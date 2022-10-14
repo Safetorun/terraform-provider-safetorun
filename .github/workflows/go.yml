@@ -23,3 +23,9 @@ jobs:
 
     - name: Test
       run: go test -v ./...
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/setup-node@v3.5.0
+      - name: Setup TFCDK Environment
+        run: npm install --global cdktf-cli@latest
