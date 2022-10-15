@@ -61,17 +61,10 @@ func organisationCreate(d *schema.ResourceData, m interface{}) error {
 	organisationId := d.Get(OrganisationId).(string)
 	organisationName := d.Get("organisation_name").(string)
 
-	response, err := m.(SafeToRunProvider).Client.CreateOrganisation(safetorun.CreateOrganisationRequest{
+	response, err := m.(SafeToRunProvider).Client.CreateOrganisationAndWait(safetorun.CreateOrganisationRequest{
 		OrganisationId:   organisationId,
 		OrganisationName: organisationName,
 	})
-
-	if err != nil {
-		log.Fatal("failed to create", err)
-		return err
-	}
-
-	err = m.(SafeToRunProvider).Client.WaitForCompletion(organisationId)
 
 	if err != nil {
 		return err
@@ -105,12 +98,12 @@ func resourceServerUpdate(d *schema.ResourceData, m interface{}) error {
 
 func resourceServerDelete(d *schema.ResourceData, m interface{}) error {
 	organisationId := d.Get(OrganisationId).(string)
-	response, err := m.(SafeToRunProvider).Client.DeleteOrganisation(organisationId)
+	response, err := m.(SafeToRunProvider).Client.DeleteOrganisationAndWait(organisationId)
 	if err != nil {
 		log.Fatal("failed to delete", err)
 		return err
 	}
 	d.SetId(response.OrganisationId)
 
-	return m.(SafeToRunProvider).Client.WaitForCompletion(organisationId)
+	return nil
 }

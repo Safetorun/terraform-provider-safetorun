@@ -2,6 +2,8 @@ package safetorun
 
 import (
 	"context"
+	"fmt"
+	"log"
 )
 
 type CreateOrganisationRequest struct {
@@ -22,6 +24,7 @@ func (client Client) CreateOrganisation(request CreateOrganisationRequest) (*Cre
 
 	ctx := context.Background()
 
+	log.Println(fmt.Sprintf("Going to create organisation for ID %s with name %s", request.OrganisationId, request.OrganisationName))
 	response, err := CreateOrganisation(ctx, client.GqlClient, request.OrganisationId, request.OrganisationName)
 
 	if err != nil {

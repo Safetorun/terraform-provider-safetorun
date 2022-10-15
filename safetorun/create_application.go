@@ -2,6 +2,8 @@ package safetorun
 
 import (
 	"context"
+	"fmt"
+	"log"
 )
 
 type CreateApplicationRequest struct {
@@ -17,6 +19,8 @@ type CreateApplicationResp struct {
 func (client Client) CreateApplication(request CreateApplicationRequest) (*CreateApplicationResp, error) {
 
 	ctx := context.Background()
+
+	log.Println(fmt.Sprintf("Going to create application inside org ID %s with name %s", request.OrganisationId, request.ApplicationName))
 
 	response, err := CreateApplication(ctx, client.GqlClient, request.OrganisationId, request.ApplicationName)
 

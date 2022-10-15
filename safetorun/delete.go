@@ -1,9 +1,15 @@
 package safetorun
 
-import "context"
+import (
+	"context"
+	"fmt"
+	"log"
+)
 
 func (client Client) DeleteOrganisation(organisationId string) (*DeleteOrganisationDeleteOrganisationOrganisationStatus, error) {
 	ctx := context.Background()
+
+	log.Println(fmt.Sprintf("Going to Delete organisation for ID %s", organisationId))
 
 	response, err := DeleteOrganisation(ctx, client.GqlClient, organisationId)
 

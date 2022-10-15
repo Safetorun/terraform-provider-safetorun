@@ -69,14 +69,8 @@ func main() {
 				Usage: "Delete an organisation from safe to run",
 				Action: func(context *cli.Context) error {
 					client := safetorun.New(authToken)
-					_, err := client.DeleteOrganisation(organisationId)
-
-					if err != nil {
-						log.Fatal(err)
-						return err
-					}
-
-					return client.WaitForCompletion(organisationId)
+					_, err := client.DeleteOrganisationAndWait(organisationId)
+					return err
 				},
 			},
 			{
@@ -94,16 +88,12 @@ func main() {
 				},
 				Action: func(c *cli.Context) error {
 					client := safetorun.New(authToken)
-					_, err := client.CreateApplication(safetorun.CreateApplicationRequest{
+					_, err := client.CreateApplicationAndWait(safetorun.CreateApplicationRequest{
 						OrganisationId:  organisationId,
 						ApplicationName: applicationName,
 					})
 
-					if err != nil {
-						log.Fatal(err)
-					}
-
-					return client.WaitForCompletion(organisationId)
+					return err
 				},
 			},
 			{
@@ -121,15 +111,10 @@ func main() {
 				},
 				Action: func(c *cli.Context) error {
 					client := safetorun.New(authToken)
-					_, err := client.DeleteApplication(safetorun.DeleteApplicationRequest{
+					_, err := client.DeleteApplicationAndWait(safetorun.DeleteApplicationRequest{
 						OrganisationId: organisationId,
 						ApplicationId:  applicationId,
 					})
-
-					if err != nil {
-						log.Fatal(err)
-					}
-
 					return err
 				},
 			},
@@ -148,16 +133,12 @@ func main() {
 				},
 				Action: func(c *cli.Context) error {
 					client := safetorun.New(authToken)
-					_, err := client.CreateOrganisation(safetorun.CreateOrganisationRequest{
+					_, err := client.CreateOrganisationAndWait(safetorun.CreateOrganisationRequest{
 						OrganisationName: organisationName,
 						OrganisationId:   organisationId,
 					})
 
-					if err != nil {
-						log.Fatal(err)
-					}
-
-					return client.WaitForCompletion(organisationId)
+					return err
 				},
 			},
 		},

@@ -1,11 +1,11 @@
 module github.com/Safetorun/safe_to_run_admin_api/tf-safetorun
 
-go 1.18
+go 1.19
 
 replace github.com/Safetorun/safe_to_run_admin_api/safetorun => ../safetorun
 
 require (
-	github.com/Safetorun/safe_to_run_admin_api/safetorun v0.0.4
+	github.com/Safetorun/safe_to_run_admin_api/safetorun v0.0.0-00010101000000-000000000000
 	github.com/hashicorp/terraform-plugin-sdk v1.17.2
 )
 
