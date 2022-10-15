@@ -14,7 +14,6 @@ func main() {
 	var applicationId string
 	var authToken string
 	var organisationId string
-	var adminEmail string
 
 	app := &cli.App{
 		EnableBashCompletion: true,
@@ -146,20 +145,12 @@ func main() {
 						Destination: &organisationName,
 						Required:    true,
 					},
-
-					&cli.StringFlag{
-						Name:        "admin_email",
-						Usage:       "Admin email",
-						Destination: &adminEmail,
-						Required:    true,
-					},
 				},
 				Action: func(c *cli.Context) error {
 					client := safetorun.New(authToken)
 					_, err := client.CreateOrganisation(safetorun.CreateOrganisationRequest{
 						OrganisationName: organisationName,
 						OrganisationId:   organisationId,
-						AdminUser:        adminEmail,
 					})
 
 					if err != nil {

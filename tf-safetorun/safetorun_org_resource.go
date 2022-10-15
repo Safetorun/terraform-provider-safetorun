@@ -59,13 +59,11 @@ func organisationResource() *schema.Resource {
 
 func organisationCreate(d *schema.ResourceData, m interface{}) error {
 	organisationId := d.Get(OrganisationId).(string)
-	adminEmail := d.Get("admin_email").(string)
 	organisationName := d.Get("organisation_name").(string)
 
 	response, err := m.(SafeToRunProvider).Client.CreateOrganisation(safetorun.CreateOrganisationRequest{
 		OrganisationId:   organisationId,
 		OrganisationName: organisationName,
-		AdminUser:        adminEmail,
 	})
 
 	if err != nil {
@@ -80,7 +78,6 @@ func organisationCreate(d *schema.ResourceData, m interface{}) error {
 	}
 
 	d.SetId(response.OrganisationId)
-	err = d.Set("admin_email", adminEmail)
 
 	if err != nil {
 		return err

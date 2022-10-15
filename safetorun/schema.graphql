@@ -38,7 +38,7 @@ type Events {
 type Mutation {
     updateOrgCreationStatus(userId: String!, organisationId: String!, status: Int!): OrganisationStatus
     deleteOrganisation(organisationId: String!): OrganisationStatus
-    createOrganisation(organisationId: String!, adminEmail: String!, organisationName: String!): OrganisationStatus
+    createOrganisation(organisationId: String!, organisationName: String!): OrganisationStatus
     updateOrganisation(organisationId: String!, organisationName: String!): OrganisationStatus
     deleteApplication(organisationId: String!, applicationId: String!): DeleteApplicationResponse!
     createApplication(organisationId: String!, input: CreateApplication!): CreateApplicationResponse!

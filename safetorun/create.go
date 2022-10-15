@@ -7,7 +7,6 @@ import (
 type CreateOrganisationRequest struct {
 	OrganisationName string
 	OrganisationId   string
-	AdminUser        string
 }
 
 type CreateOrganisationResp struct {
@@ -23,7 +22,7 @@ func (client Client) CreateOrganisation(request CreateOrganisationRequest) (*Cre
 
 	ctx := context.Background()
 
-	response, err := CreateOrganisation(ctx, client.GqlClient, request.AdminUser, request.OrganisationId, request.OrganisationName)
+	response, err := CreateOrganisation(ctx, client.GqlClient, request.OrganisationId, request.OrganisationName)
 
 	if err != nil {
 		return nil, err

@@ -67,7 +67,7 @@ func (client Client) WaitForCompletion(organisationId string) error {
 		case EndedWithSuccess:
 			return nil
 		case EndedWithError:
-			return errors.New("failed to complete")
+			return errors.New("sorry. Something went wrong")
 		}
 	}
 }

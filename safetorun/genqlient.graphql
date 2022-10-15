@@ -1,5 +1,5 @@
-mutation CreateOrganisation($adminEmail: String!, $organisationId: String!, $organisationName: String!) {
-    createOrganisation(adminEmail: $adminEmail, organisationId: $organisationId, organisationName: $organisationName) {
+mutation CreateOrganisation($organisationId: String!, $organisationName: String!) {
+    createOrganisation(organisationId: $organisationId, organisationName: $organisationName) {
         OrganisationId
         Status
     }

@@ -28,30 +28,6 @@ func (v *CreateApplicationResponse) GetCreateApplication() CreateApplicationCrea
 	return v.CreateApplication
 }
 
-// CreateEventCreateEvent includes the requested fields of the GraphQL type Event.
-type CreateEventCreateEvent struct {
-	EventId string `json:"EventId"`
-	Time    int    `json:"Time"`
-	Status  int    `json:"Status"`
-}
-
-// GetEventId returns CreateEventCreateEvent.EventId, and is useful for accessing the field via an interface.
-func (v *CreateEventCreateEvent) GetEventId() string { return v.EventId }
-
-// GetTime returns CreateEventCreateEvent.Time, and is useful for accessing the field via an interface.
-func (v *CreateEventCreateEvent) GetTime() int { return v.Time }
-
-// GetStatus returns CreateEventCreateEvent.Status, and is useful for accessing the field via an interface.
-func (v *CreateEventCreateEvent) GetStatus() int { return v.Status }
-
-// CreateEventResponse is returned by CreateEvent on success.
-type CreateEventResponse struct {
-	CreateEvent CreateEventCreateEvent `json:"createEvent"`
-}
-
-// GetCreateEvent returns CreateEventResponse.CreateEvent, and is useful for accessing the field via an interface.
-func (v *CreateEventResponse) GetCreateEvent() CreateEventCreateEvent { return v.CreateEvent }
-
 // CreateOrganisationCreateOrganisationOrganisationStatus includes the requested fields of the GraphQL type OrganisationStatus.
 type CreateOrganisationCreateOrganisationOrganisationStatus struct {
 	OrganisationId string `json:"OrganisationId"`
@@ -328,35 +304,11 @@ func (v *__CreateApplicationInput) GetOrganisationId() string { return v.Organis
 // GetApplicationName returns __CreateApplicationInput.ApplicationName, and is useful for accessing the field via an interface.
 func (v *__CreateApplicationInput) GetApplicationName() string { return v.ApplicationName }
 
-// __CreateEventInput is used internally by genqlient
-type __CreateEventInput struct {
-	Event  string `json:"event"`
-	UserId string `json:"userId"`
-	Status int    `json:"status"`
-	LinkId string `json:"linkId"`
-}
-
-// GetEvent returns __CreateEventInput.Event, and is useful for accessing the field via an interface.
-func (v *__CreateEventInput) GetEvent() string { return v.Event }
-
-// GetUserId returns __CreateEventInput.UserId, and is useful for accessing the field via an interface.
-func (v *__CreateEventInput) GetUserId() string { return v.UserId }
-
-// GetStatus returns __CreateEventInput.Status, and is useful for accessing the field via an interface.
-func (v *__CreateEventInput) GetStatus() int { return v.Status }
-
-// GetLinkId returns __CreateEventInput.LinkId, and is useful for accessing the field via an interface.
-func (v *__CreateEventInput) GetLinkId() string { return v.LinkId }
-
 // __CreateOrganisationInput is used internally by genqlient
 type __CreateOrganisationInput struct {
-	AdminEmail       string `json:"adminEmail"`
 	OrganisationId   string `json:"organisationId"`
 	OrganisationName string `json:"organisationName"`
 }
-
-// GetAdminEmail returns __CreateOrganisationInput.AdminEmail, and is useful for accessing the field via an interface.
-func (v *__CreateOrganisationInput) GetAdminEmail() string { return v.AdminEmail }
 
 // GetOrganisationId returns __CreateOrganisationInput.OrganisationId, and is useful for accessing the field via an interface.
 func (v *__CreateOrganisationInput) GetOrganisationId() string { return v.OrganisationId }
@@ -470,65 +422,23 @@ mutation CreateApplication ($organisationId: String!, $applicationName: String!)
 	return &data, err
 }
 
-func CreateEvent(
-	ctx context.Context,
-	client graphql.Client,
-	event string,
-	userId string,
-	status int,
-	linkId string,
-) (*CreateEventResponse, error) {
-	req := &graphql.Request{
-		OpName: "CreateEvent",
-		Query: `
-mutation CreateEvent ($event: String!, $userId: String!, $status: Int!, $linkId: String!) {
-	createEvent(event: $event, userId: $userId, status: $status, linkId: $linkId) {
-		EventId
-		Time
-		Status
-	}
-}
-`,
-		Variables: &__CreateEventInput{
-			Event:  event,
-			UserId: userId,
-			Status: status,
-			LinkId: linkId,
-		},
-	}
-	var err error
-
-	var data CreateEventResponse
-	resp := &graphql.Response{Data: &data}
-
-	err = client.MakeRequest(
-		ctx,
-		req,
-		resp,
-	)
-
-	return &data, err
-}
-
 func CreateOrganisation(
 	ctx context.Context,
 	client graphql.Client,
-	adminEmail string,
 	organisationId string,
 	organisationName string,
 ) (*CreateOrganisationResponse, error) {
 	req := &graphql.Request{
 		OpName: "CreateOrganisation",
 		Query: `
-mutation CreateOrganisation ($adminEmail: String!, $organisationId: String!, $organisationName: String!) {
-	createOrganisation(adminEmail: $adminEmail, organisationId: $organisationId, organisationName: $organisationName) {
+mutation CreateOrganisation ($organisationId: String!, $organisationName: String!) {
+	createOrganisation(organisationId: $organisationId, organisationName: $organisationName) {
 		OrganisationId
 		Status
 	}
 }
 `,
 		Variables: &__CreateOrganisationInput{
-			AdminEmail:       adminEmail,
 			OrganisationId:   organisationId,
 			OrganisationName: organisationName,
 		},
