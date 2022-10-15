@@ -14,3 +14,7 @@ func (client Client) DeleteOrganisation(organisationId string) (*DeleteOrganisat
 	status := response.GetDeleteOrganisation()
 	return &status, nil
 }
+
+func (client Client) DeleteOrganisationAndWait(organisationId string) (*DeleteOrganisationDeleteOrganisationOrganisationStatus, error) {
+	return PerformActionAndWait(client, organisationId, organisationId, client.DeleteOrganisation)
+}

@@ -15,6 +15,10 @@ type CreateOrganisationResp struct {
 	OrganisationId string
 }
 
+func (client Client) CreateOrganisationAndWait(request CreateOrganisationRequest) (*CreateOrganisationResp, error) {
+	return PerformActionAndWait(client, request, request.OrganisationId, client.CreateOrganisation)
+}
+
 func (client Client) CreateOrganisation(request CreateOrganisationRequest) (*CreateOrganisationResp, error) {
 
 	ctx := context.Background()

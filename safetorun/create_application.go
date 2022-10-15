@@ -30,3 +30,7 @@ func (client Client) CreateApplication(request CreateApplicationRequest) (*Creat
 		ApplicationId: status.ApplicationId,
 	}, err
 }
+
+func (client Client) CreateApplicationAndWait(request CreateApplicationRequest) (*CreateApplicationResp, error) {
+	return PerformActionAndWait(client, request, request.OrganisationId, client.CreateApplication)
+}

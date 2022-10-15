@@ -32,3 +32,7 @@ func (client Client) DeleteApplication(request DeleteApplicationRequest) (*Delet
 		ApplicationId: status.ApplicationId,
 	}, err
 }
+
+func (client Client) DeleteApplicationAndWait(request DeleteApplicationRequest) (*DeleteApplicationResp, error) {
+	return PerformActionAndWait(client, request, request.OrganisationId, client.DeleteApplication)
+}

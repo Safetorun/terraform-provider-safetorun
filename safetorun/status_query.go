@@ -37,6 +37,21 @@ func (client Client) QueryStatus(organisationId string) (*GetForOrganisationIdGe
 	return &status, err
 }
 
+func PerformActionAndWait[T, U any](client Client, u T, organisationId string, f func(T) (U, error)) (U, error) {
+	response, err := f(u)
+	if err != nil {
+		return nil, err
+	}
+
+	err = client.WaitForCompletion(organisationId)
+
+	if err != nil {
+		return nil, err
+	}
+
+	return response, nil
+}
+
 func (client Client) WaitForCompletion(organisationId string) error {
 	for {
 		re, err := client.RetrieveLastEventForLinkId(organisationId)
