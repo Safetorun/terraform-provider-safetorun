@@ -37,7 +37,7 @@ func (client Client) QueryStatus(organisationId string) (*GetForOrganisationIdGe
 	return &status, err
 }
 
-func PerformActionAndWait[T, U any](client Client, u T, organisationId string, f func(T) (U, error)) (U, error) {
+func PerformActionAndWait[T, U any](client Client, u T, organisationId string, f func(T) (*U, error)) (*U, error) {
 	response, err := f(u)
 	if err != nil {
 		return nil, err
