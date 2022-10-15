@@ -71,7 +71,11 @@ func applicationUpdate(d *schema.ResourceData, m interface{}) error {
 
 	d.SetId(applicationId)
 
-	_, err := m.(SafeToRunProvider).Client.UpdateApplication(organisationId, applicationId, applicationName)
+	_, err := m.(SafeToRunProvider).Client.UpdateApplication(safetorun.UpdateApplicationRequest{
+		OrganisationId:  organisationId,
+		ApplicationId:   applicationId,
+		ApplicationName: applicationName,
+	})
 
 	if err != nil {
 		return err

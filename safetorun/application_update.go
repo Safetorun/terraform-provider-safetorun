@@ -6,11 +6,17 @@ import (
 	"log"
 )
 
-func (client Client) UpdateApplication(organisationId string, applicationId string, applicationName string) (*UpdateApplicationUpdateApplicationCreateApplicationResponse, error) {
+type UpdateApplicationRequest struct {
+	OrganisationId  string
+	ApplicationId   string
+	ApplicationName string
+}
+
+func (client Client) UpdateApplication(request UpdateApplicationRequest) (*UpdateApplicationUpdateApplicationCreateApplicationResponse, error) {
 	ctx := context.Background()
 
-	log.Println(fmt.Sprintf("Going to update application for the organisation %s and appId %s to have new app name %s", organisationId, applicationId, applicationName))
-	response, err := UpdateApplication(ctx, client.GqlClient, organisationId, applicationId, applicationName)
+	log.Println(fmt.Sprintf("Going to update application for the organisation %s and appId %s to have new app name %s", request.OrganisationId, request.ApplicationId, request.ApplicationName))
+	response, err := UpdateApplication(ctx, client.GqlClient, request.OrganisationId, request.ApplicationId, request.ApplicationName)
 
 	if err != nil {
 		return nil, err
@@ -18,4 +24,8 @@ func (client Client) UpdateApplication(organisationId string, applicationId stri
 
 	status := response.GetUpdateApplication()
 	return &status, err
+}
+
+func (client Client) UpdateApplicationAndWait(request UpdateApplicationRequest) (*UpdateApplicationUpdateApplicationCreateApplicationResponse, error) {
+	return PerformActionAndWait(client, request, request.OrganisationId, client.UpdateApplication)
 }
