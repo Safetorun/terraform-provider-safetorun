@@ -21,7 +21,6 @@ const (
 	CreateInProgress Status = iota
 	EndedWithError          = iota
 	EndedWithSuccess        = iota
-	Noop                    = iota
 )
 
 func (client Client) QueryStatus(organisationId string) (*GetForOrganisationIdGetOrganisationStatus, error) {

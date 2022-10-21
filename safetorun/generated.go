@@ -292,6 +292,24 @@ func (v *UpdateApplicationUpdateApplicationCreateApplicationResponse) GetApplica
 	return v.ApplicationId
 }
 
+// UploadUrlGetUploadUrlUploadUrlResponse includes the requested fields of the GraphQL type UploadUrlResponse.
+type UploadUrlGetUploadUrlUploadUrlResponse struct {
+	Url string `json:"Url"`
+}
+
+// GetUrl returns UploadUrlGetUploadUrlUploadUrlResponse.Url, and is useful for accessing the field via an interface.
+func (v *UploadUrlGetUploadUrlUploadUrlResponse) GetUrl() string { return v.Url }
+
+// UploadUrlResponse is returned by UploadUrl on success.
+type UploadUrlResponse struct {
+	GetUploadUrl UploadUrlGetUploadUrlUploadUrlResponse `json:"getUploadUrl"`
+}
+
+// GetGetUploadUrl returns UploadUrlResponse.GetUploadUrl, and is useful for accessing the field via an interface.
+func (v *UploadUrlResponse) GetGetUploadUrl() UploadUrlGetUploadUrlUploadUrlResponse {
+	return v.GetUploadUrl
+}
+
 // __CreateApplicationInput is used internally by genqlient
 type __CreateApplicationInput struct {
 	OrganisationId  string `json:"organisationId"`
@@ -387,6 +405,18 @@ func (v *__UpdateApplicationInput) GetApplicationId() string { return v.Applicat
 
 // GetApplicationName returns __UpdateApplicationInput.ApplicationName, and is useful for accessing the field via an interface.
 func (v *__UpdateApplicationInput) GetApplicationName() string { return v.ApplicationName }
+
+// __UploadUrlInput is used internally by genqlient
+type __UploadUrlInput struct {
+	OrganisationId string `json:"organisationId"`
+	ApplicationId  string `json:"applicationId"`
+}
+
+// GetOrganisationId returns __UploadUrlInput.OrganisationId, and is useful for accessing the field via an interface.
+func (v *__UploadUrlInput) GetOrganisationId() string { return v.OrganisationId }
+
+// GetApplicationId returns __UploadUrlInput.ApplicationId, and is useful for accessing the field via an interface.
+func (v *__UploadUrlInput) GetApplicationId() string { return v.ApplicationId }
 
 func CreateApplication(
 	ctx context.Context,
@@ -726,6 +756,40 @@ mutation UpdateApplication ($organisationId: String!, $applicationId: String!, $
 	var err error
 
 	var data UpdateApplicationResponse
+	resp := &graphql.Response{Data: &data}
+
+	err = client.MakeRequest(
+		ctx,
+		req,
+		resp,
+	)
+
+	return &data, err
+}
+
+func UploadUrl(
+	ctx context.Context,
+	client graphql.Client,
+	organisationId string,
+	applicationId string,
+) (*UploadUrlResponse, error) {
+	req := &graphql.Request{
+		OpName: "UploadUrl",
+		Query: `
+query UploadUrl ($organisationId: String!, $applicationId: String!) {
+	getUploadUrl(input: {OrganisationId:$organisationId,ApplicationId:$applicationId}) {
+		Url
+	}
+}
+`,
+		Variables: &__UploadUrlInput{
+			OrganisationId: organisationId,
+			ApplicationId:  applicationId,
+		},
+	}
+	var err error
+
+	var data UploadUrlResponse
 	resp := &graphql.Response{Data: &data}
 
 	err = client.MakeRequest(

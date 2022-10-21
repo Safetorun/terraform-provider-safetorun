@@ -14,6 +14,7 @@ func main() {
 	var applicationId string
 	var authToken string
 	var organisationId string
+	var applicationFile cli.Path
 
 	app := &cli.App{
 		EnableBashCompletion: true,
@@ -32,6 +33,7 @@ func main() {
 			},
 		},
 		Commands: []*cli.Command{
+
 			{
 				Name:  "list-apps",
 				Usage: "List applications",
@@ -74,10 +76,37 @@ func main() {
 				},
 			},
 			{
+				Name:  "upload-config",
+				Usage: "Upload application config",
+				Action: func(c *cli.Context) error {
+					client := safetorun.New(authToken)
+					_, err := client.UploadApplicationConfiguration(safetorun.UploadApplicationConfiguration{
+						OrganisationId:        organisationId,
+						ApplicationId:         applicationId,
+						ConfigurationFilename: applicationFile,
+					})
+					return err
+				},
+				Flags: []cli.Flag{
+					&cli.StringFlag{
+						Name:        "application_id",
+						Usage:       "Application name to create",
+						Aliases:     []string{"aid"},
+						Destination: &applicationId,
+						Required:    true,
+					},
+					&cli.PathFlag{
+						Destination: &applicationFile,
+						Name:        "application_config",
+						Aliases:     []string{"c"},
+						Required:    true,
+					},
+				},
+			},
+			{
 				Name:  "create-app",
 				Usage: "Create a new application on safe to run",
 				Flags: []cli.Flag{
-
 					&cli.StringFlag{
 						Name:        "application_name",
 						Usage:       "Application name to create",

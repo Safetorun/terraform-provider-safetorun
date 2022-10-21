@@ -12,6 +12,8 @@ query GetForOrganisationId($organisationId: String!) {
     }
 }
 
+
+
 mutation CreateApplication($organisationId: String!, $applicationName: String!) {
     createApplication(input: {ApplicationName: $applicationName}, organisationId: $organisationId) {
         ApplicationId
@@ -33,6 +35,12 @@ mutation UpdateApplication($organisationId: String!, $applicationId: String!, $a
 mutation DeleteApplication($organisationId: String!, $applicationId: String!) {
     deleteApplication(organisationId: $organisationId, applicationId: $applicationId) {
         ApplicationId
+    }
+}
+
+query UploadUrl($organisationId: String!, $applicationId: String!) {
+    getUploadUrl(input: {OrganisationId: $organisationId, ApplicationId: $applicationId}) {
+        Url
     }
 }
 

@@ -4,6 +4,15 @@
     ApiKey: String!
 }
 
+input UploadUrlRequest {
+    ApplicationId: String!
+    OrganisationId: String!
+}
+
+type UploadUrlResponse {
+    Url: String!
+}
+
 type ApplicationList {
     items: [Application]
 }
@@ -74,4 +83,5 @@ type Query {
     listApplications(organisationId: String!): ApplicationList
     listEvents: Events
     eventsForLinkId(linkId: String!): Events
+    getUploadUrl(input: UploadUrlRequest!) : UploadUrlResponse!
 }
