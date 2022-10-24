@@ -33,13 +33,37 @@ func main() {
 			},
 		},
 		Commands: []*cli.Command{
-
 			{
 				Name:  "list-apps",
 				Usage: "List applications",
 				Action: func(context *cli.Context) error {
 					client := safetorun.New(authToken)
 					event, err := client.ListApplications(organisationId)
+
+					if err != nil {
+						log.Fatal(err)
+						return err
+					}
+
+					log.Println(fmt.Sprintf("%+v", event))
+					return nil
+				},
+			},
+			{
+				Name:  "get-app",
+				Usage: "Get application",
+				Flags: []cli.Flag{
+					&cli.StringFlag{
+						Name:        "application_id",
+						Usage:       "Application name to create",
+						Aliases:     []string{"aid"},
+						Destination: &applicationId,
+						Required:    true,
+					},
+				},
+				Action: func(context *cli.Context) error {
+					client := safetorun.New(authToken)
+					event, err := client.QueryApplication(organisationId, applicationId)
 
 					if err != nil {
 						log.Fatal(err)

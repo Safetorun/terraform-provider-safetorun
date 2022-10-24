@@ -7,8 +7,6 @@ import (
 	"log"
 )
 
-const OrganisationId = "organisation_id"
-
 func organisationData() *schema.Resource {
 	return &schema.Resource{
 		Read: resourceServerRead,
@@ -46,10 +44,6 @@ func organisationResource() *schema.Resource {
 				Required: true,
 			},
 			"organisation_name": {
-				Type:     schema.TypeString,
-				Required: true,
-			},
-			"admin_email": {
 				Type:     schema.TypeString,
 				Required: true,
 			},

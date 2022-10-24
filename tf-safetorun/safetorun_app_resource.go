@@ -46,11 +46,11 @@ func applicationResource() *schema.Resource {
 				Type:     schema.TypeString,
 				Required: true,
 			},
-			"organisation_id": {
+			OrganisationId: {
 				Type:     schema.TypeString,
 				Required: true,
 			},
-			"application_id": {
+			ApplicationId: {
 				Type:     schema.TypeString,
 				Required: false,
 				Computed: true,
@@ -69,8 +69,6 @@ func applicationUpdate(d *schema.ResourceData, m interface{}) error {
 	applicationId := d.Get("application_id").(string)
 	applicationName := d.Get("application_name").(string)
 
-	d.SetId(applicationId)
-
 	_, err := m.(SafeToRunProvider).Client.UpdateApplication(safetorun.UpdateApplicationRequest{
 		OrganisationId:  organisationId,
 		ApplicationId:   applicationId,
@@ -85,8 +83,8 @@ func applicationUpdate(d *schema.ResourceData, m interface{}) error {
 }
 
 func applicationRead(d *schema.ResourceData, m interface{}) error {
-	organisationId := d.Get("organisation_id").(string)
-	applicationId := d.Get("application_id").(string)
+	organisationId := d.Get(OrganisationId).(string)
+	applicationId := d.Get(ApplicationId).(string)
 	d.SetId(applicationId)
 	response, err := m.(SafeToRunProvider).Client.QueryApplication(organisationId, applicationId)
 
@@ -94,7 +92,7 @@ func applicationRead(d *schema.ResourceData, m interface{}) error {
 		return err
 	}
 
-	err = d.Set("application_id", response.ApplicationId)
+	err = d.Set(ApplicationId, response.ApplicationId)
 
 	if err != nil {
 		return err
@@ -126,10 +124,10 @@ func applicationDelete(d *schema.ResourceData, m interface{}) error {
 }
 
 func applicationCreate(d *schema.ResourceData, m interface{}) error {
-	organisationId := d.Get("organisation_id").(string)
+	organisationId := d.Get(OrganisationId).(string)
 	applicationName := d.Get("application_name").(string)
 
-	response, err := m.(SafeToRunProvider).Client.CreateApplication(safetorun.CreateApplicationRequest{
+	response, err := m.(SafeToRunProvider).Client.CreateApplicationAndWait(safetorun.CreateApplicationRequest{
 		OrganisationId:  organisationId,
 		ApplicationName: applicationName,
 	})
@@ -146,7 +144,7 @@ func applicationCreate(d *schema.ResourceData, m interface{}) error {
 		return err
 	}
 
-	err = d.Set("application_id", response.ApplicationId)
+	err = d.Set(ApplicationId, response.ApplicationId)
 	if err != nil {
 		return err
 	}
@@ -157,5 +155,5 @@ func applicationCreate(d *schema.ResourceData, m interface{}) error {
 		return err
 	}
 
-	return resourceServerRead(d, m)
+	return applicationRead(d, m)
 }

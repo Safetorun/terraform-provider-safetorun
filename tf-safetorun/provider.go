@@ -18,8 +18,9 @@ func Provider() *schema.Provider {
 			"token": accessToken(),
 		},
 		ResourcesMap: map[string]*schema.Resource{
-			"safetorun_organisation": organisationResource(),
-			"safetorun_application":  applicationResource(),
+			"safetorun_organisation":              organisationResource(),
+			"safetorun_application":               applicationResource(),
+			"safetorun_application_configuration": applicationConfigurationResource(),
 		},
 
 		DataSourcesMap: map[string]*schema.Resource{

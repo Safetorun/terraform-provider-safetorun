@@ -13,9 +13,11 @@ func (client Client) QueryApplication(organisationId string, applicationId strin
 	response, err := GetApplication(ctx, client.GqlClient, organisationId, applicationId)
 
 	if err != nil {
+		log.Fatal(err)
 		return nil, err
 	}
 
 	status := response.GetGetApplication()
+
 	return &status, err
 }
