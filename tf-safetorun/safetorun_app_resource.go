@@ -11,12 +11,12 @@ func StateFuncApp(data *schema.ResourceData, iface interface{}) ([]*schema.Resou
 	retVal := make([]*schema.ResourceData, 1)
 
 	id := strings.Split(data.Id(), ".")
-	err := data.Set("organisation_id", id[0])
+	err := data.Set(OrganisationId, id[0])
 	if err != nil {
 		return nil, err
 	}
 
-	err = data.Set("application_id", id[1])
+	err = data.Set(ApplicationId, id[1])
 
 	if err != nil {
 		return nil, err
@@ -65,8 +65,8 @@ func applicationResource() *schema.Resource {
 }
 
 func applicationUpdate(d *schema.ResourceData, m interface{}) error {
-	organisationId := d.Get("organisation_id").(string)
-	applicationId := d.Get("application_id").(string)
+	organisationId := d.Get(OrganisationId).(string)
+	applicationId := d.Get(ApplicationId).(string)
 	applicationName := d.Get("application_name").(string)
 
 	_, err := m.(SafeToRunProvider).Client.UpdateApplication(safetorun.UpdateApplicationRequest{
@@ -108,7 +108,7 @@ func applicationRead(d *schema.ResourceData, m interface{}) error {
 }
 
 func applicationDelete(d *schema.ResourceData, m interface{}) error {
-	organisationId := d.Get("organisation_id").(string)
+	organisationId := d.Get(OrganisationId).(string)
 	applicationName := d.Get("application_name").(string)
 
 	_, err := m.(SafeToRunProvider).Client.DeleteApplication(safetorun.DeleteApplicationRequest{

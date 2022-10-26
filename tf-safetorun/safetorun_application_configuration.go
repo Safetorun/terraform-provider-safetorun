@@ -30,6 +30,10 @@ func applicationConfigurationResource() *schema.Resource {
 				Required: true,
 				Computed: false,
 			},
+			"file_hash": {
+				Type:     schema.TypeString,
+				Required: true,
+			},
 		},
 	}
 }
