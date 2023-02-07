@@ -29,3 +29,18 @@ jobs:
       - uses: actions/setup-node@v3.5.0
       - name: Setup TFCDK Environment
         run: npm install --global cdktf-cli@latest
+
+  artifact:
+    runs-on: ubuntu-latest
+    steps:
+      - name:
+        script: |
+          cd tf-safetorun
+          go build
+          mv tf-safetorun terraform-provider-safetorun_v1.0.0
+      - name: Release
+        uses: softprops/action-gh-release@v1
+        with:
+          tag_name: v1.0.0
+          files: terraform-provider-safetorun_v1.0.0
+          fail_on_unmatched_files: true
