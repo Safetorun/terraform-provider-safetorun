@@ -39,7 +39,7 @@ jobs:
         with:
           go-version: 1.19
       - name: Deploy
-        script: |
+        run: |
           cd tf-safetorun
           go build
           mv tf-safetorun terraform-provider-safetorun_v1.0.0
