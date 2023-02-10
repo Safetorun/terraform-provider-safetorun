@@ -64,6 +64,7 @@ func (client Client) WaitForCompletion(organisationId string) error {
 			time.Sleep(time.Second)
 			break
 		case EndedWithSuccess:
+			time.Sleep(time.Second * 3)
 			return nil
 		case EndedWithError:
 			return errors.New("sorry. Something went wrong")
