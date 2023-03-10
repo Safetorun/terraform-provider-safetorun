@@ -25,6 +25,13 @@ mutation DeleteOrganisation($organisationId:String!) {
         OrganisationId
     }
 }
+query ListOrganisations {
+    listOrganisations {
+        items {
+            OrganisationId
+        }
+    }
+}
 
 mutation UpdateApplication($organisationId: String!, $applicationId: String!, $applicationName : String!) {
     updateApplication(organisationId: $organisationId, applicationId: $applicationId, input: {ApplicationName: $applicationName}) {

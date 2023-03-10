@@ -272,6 +272,36 @@ type ListEventsResponse struct {
 // GetListEvents returns ListEventsResponse.ListEvents, and is useful for accessing the field via an interface.
 func (v *ListEventsResponse) GetListEvents() ListEventsListEvents { return v.ListEvents }
 
+// ListOrganisationsListOrganisationsOrganisationList includes the requested fields of the GraphQL type OrganisationList.
+type ListOrganisationsListOrganisationsOrganisationList struct {
+	Items []ListOrganisationsListOrganisationsOrganisationListItemsOrganisation `json:"items"`
+}
+
+// GetItems returns ListOrganisationsListOrganisationsOrganisationList.Items, and is useful for accessing the field via an interface.
+func (v *ListOrganisationsListOrganisationsOrganisationList) GetItems() []ListOrganisationsListOrganisationsOrganisationListItemsOrganisation {
+	return v.Items
+}
+
+// ListOrganisationsListOrganisationsOrganisationListItemsOrganisation includes the requested fields of the GraphQL type Organisation.
+type ListOrganisationsListOrganisationsOrganisationListItemsOrganisation struct {
+	OrganisationId string `json:"OrganisationId"`
+}
+
+// GetOrganisationId returns ListOrganisationsListOrganisationsOrganisationListItemsOrganisation.OrganisationId, and is useful for accessing the field via an interface.
+func (v *ListOrganisationsListOrganisationsOrganisationListItemsOrganisation) GetOrganisationId() string {
+	return v.OrganisationId
+}
+
+// ListOrganisationsResponse is returned by ListOrganisations on success.
+type ListOrganisationsResponse struct {
+	ListOrganisations ListOrganisationsListOrganisationsOrganisationList `json:"listOrganisations"`
+}
+
+// GetListOrganisations returns ListOrganisationsResponse.ListOrganisations, and is useful for accessing the field via an interface.
+func (v *ListOrganisationsResponse) GetListOrganisations() ListOrganisationsListOrganisationsOrganisationList {
+	return v.ListOrganisations
+}
+
 // UpdateApplicationResponse is returned by UpdateApplication on success.
 type UpdateApplicationResponse struct {
 	UpdateApplication UpdateApplicationUpdateApplicationCreateApplicationResponse `json:"updateApplication"`
@@ -720,6 +750,36 @@ query ListEvents {
 	var err error
 
 	var data ListEventsResponse
+	resp := &graphql.Response{Data: &data}
+
+	err = client.MakeRequest(
+		ctx,
+		req,
+		resp,
+	)
+
+	return &data, err
+}
+
+func ListOrganisations(
+	ctx context.Context,
+	client graphql.Client,
+) (*ListOrganisationsResponse, error) {
+	req := &graphql.Request{
+		OpName: "ListOrganisations",
+		Query: `
+query ListOrganisations {
+	listOrganisations {
+		items {
+			OrganisationId
+		}
+	}
+}
+`,
+	}
+	var err error
+
+	var data ListOrganisationsResponse
 	resp := &graphql.Response{Data: &data}
 
 	err = client.MakeRequest(

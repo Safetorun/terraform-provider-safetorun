@@ -26,16 +26,18 @@ func main() {
 				Destination: &authToken,
 				Required:    true,
 			},
-			&cli.StringFlag{
-				Name:        "organisation_id",
-				Destination: &organisationId,
-				Required:    true,
-			},
 		},
 		Commands: []*cli.Command{
 			{
 				Name:  "list-apps",
 				Usage: "List applications",
+				Flags: []cli.Flag{
+					&cli.StringFlag{
+						Name:        "organisation_id",
+						Destination: &organisationId,
+						Required:    true,
+					},
+				},
 				Action: func(context *cli.Context) error {
 					client := safetorun.New(authToken)
 					event, err := client.ListApplications(organisationId)
@@ -53,6 +55,11 @@ func main() {
 				Name:  "get-app",
 				Usage: "Get application",
 				Flags: []cli.Flag{
+					&cli.StringFlag{
+						Name:        "organisation_id",
+						Destination: &organisationId,
+						Required:    true,
+					},
 					&cli.StringFlag{
 						Name:        "application_id",
 						Usage:       "Application name to create",
@@ -77,6 +84,13 @@ func main() {
 			{
 				Name:  "latest_event",
 				Usage: "Latest event",
+				Flags: []cli.Flag{
+					&cli.StringFlag{
+						Name:        "organisation_id",
+						Destination: &organisationId,
+						Required:    true,
+					},
+				},
 				Action: func(context *cli.Context) error {
 					client := safetorun.New(authToken)
 					event, err := client.RetrieveLastEventForLinkId(organisationId)
@@ -91,7 +105,14 @@ func main() {
 				},
 			},
 			{
-				Name:  "delete-org",
+				Name: "delete-org",
+				Flags: []cli.Flag{
+					&cli.StringFlag{
+						Name:        "organisation_id",
+						Destination: &organisationId,
+						Required:    true,
+					},
+				},
 				Usage: "Delete an organisation from safe to run",
 				Action: func(context *cli.Context) error {
 					client := safetorun.New(authToken)
@@ -113,6 +134,12 @@ func main() {
 				},
 				Flags: []cli.Flag{
 					&cli.StringFlag{
+						Name:        "organisation_id",
+						Destination: &organisationId,
+						Required:    true,
+					},
+
+					&cli.StringFlag{
 						Name:        "application_id",
 						Usage:       "Application name to create",
 						Aliases:     []string{"aid"},
@@ -131,6 +158,11 @@ func main() {
 				Name:  "create-app",
 				Usage: "Create a new application on safe to run",
 				Flags: []cli.Flag{
+					&cli.StringFlag{
+						Name:        "organisation_id",
+						Destination: &organisationId,
+						Required:    true,
+					},
 					&cli.StringFlag{
 						Name:        "application_name",
 						Usage:       "Application name to create",
@@ -153,7 +185,11 @@ func main() {
 				Name:  "delete-app",
 				Usage: "delete a new application on safe to run",
 				Flags: []cli.Flag{
-
+					&cli.StringFlag{
+						Name:        "organisation_id",
+						Destination: &organisationId,
+						Required:    true,
+					},
 					&cli.StringFlag{
 						Name:        "application_id",
 						Usage:       "Application name to create",
@@ -175,7 +211,11 @@ func main() {
 				Name:  "create-org",
 				Usage: "Create a new organisation on safe to run",
 				Flags: []cli.Flag{
-
+					&cli.StringFlag{
+						Name:        "organisation_id",
+						Destination: &organisationId,
+						Required:    true,
+					},
 					&cli.StringFlag{
 						Name:        "org_name",
 						Usage:       "Organisation name to create",
@@ -191,6 +231,18 @@ func main() {
 						OrganisationId:   organisationId,
 					})
 
+					return err
+				},
+			},
+			{
+				Name:  "list-orgs",
+				Usage: "List organisations for this user",
+				Action: func(c *cli.Context) error {
+					client := safetorun.New(authToken)
+					organisations, err := client.ListOrganisations()
+					for _, organisation := range organisations.Items {
+						log.Println(fmt.Sprintf("Orgsanisation Id: %+v", organisation))
+					}
 					return err
 				},
 			},
