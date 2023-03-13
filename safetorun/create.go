@@ -20,19 +20,6 @@ func (client Client) CreateOrganisationAndWait(request CreateOrganisationRequest
 	return PerformActionAndWait(client, request, request.OrganisationId, client.CreateOrganisation)
 }
 
-func (client Client) ListOrganisations() (*ListOrganisationsListOrganisationsOrganisationList, error) {
-	ctx := context.Background()
-	response, err := ListOrganisations(ctx, client.GqlClient)
-
-	if err != nil {
-		return nil, err
-	}
-
-	resp := response.GetListOrganisations()
-
-	return &resp, nil
-}
-
 func (client Client) CreateOrganisation(request CreateOrganisationRequest) (*CreateOrganisationResp, error) {
 
 	ctx := context.Background()

@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/jquery.terminal/js/jquery.terminal.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/jquery.terminal/css/jquery.terminal.min.css"/>
+    <script src="wasm_exec.js"></script>
+    <script src="js/js_bridge.js"></script>
+</head>
+<body>
+</body>
+</html>
+<script>
+
+
+    const go = new Go();
+
+    WebAssembly.instantiateStreaming(fetch("json.wasm"), go.importObject).then((result) => {
+        go.run(result.instance);
+
+        $('body').terminal({
+            listOrgs: async function (token) {
+                await listOrganisations.call(this, token);
+            },
+            deleteOrg: async function (token, orgId) {
+                await deleteOrganisation.call(this, token, orgId);
+            },
+            createOrg: async function (token, orgId, orgName) {
+                await createOrganisation.call(this, token, orgId, orgName);
+            },
+        }, {
+            greetings: 'Let\'s get started'
+        });
+    });
+</script>
