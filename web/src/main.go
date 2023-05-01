@@ -85,6 +85,61 @@ func createOrganisation() js.Func {
 	})
 }
 
+func listApplications() js.Func {
+	return executeWithPromise(func(args []js.Value) (string, error) {
+		token := args[0].String()
+		organisationId := args[1].String()
+
+		client := safetorun.New(token)
+		applications, err := client.ListApplications(organisationId)
+
+		if err != nil {
+			return "", err
+		} else {
+			return ToJson(applications.Items), nil
+		}
+	})
+}
+
+func createApplication() js.Func {
+	return executeWithPromise(func(args []js.Value) (string, error) {
+		token := args[0].String()
+		organisationId := args[1].String()
+		applicationName := args[2].String()
+
+		client := safetorun.New(token)
+		application, err := client.CreateApplicationAndWait(safetorun.CreateApplicationRequest{
+			OrganisationId:  organisationId,
+			ApplicationName: applicationName,
+		})
+
+		if err != nil {
+			return "", err
+		} else {
+			return ToJson(application), nil
+		}
+	})
+}
+
+func deleteApplication() js.Func {
+	return executeWithPromise(func(args []js.Value) (string, error) {
+		token := args[0].String()
+		organisationId := args[1].String()
+		applicationId := args[2].String()
+
+		client := safetorun.New(token)
+		_, err := client.DeleteApplicationAndWait(safetorun.DeleteApplicationRequest{
+			OrganisationId: organisationId,
+			ApplicationId:  applicationId,
+		})
+		if err != nil {
+			return "", err
+		} else {
+			return ToJson("Application deleted"), nil
+		}
+	})
+}
+
 func jsonError(err error, reject js.Value) {
 	errorConstructor := js.Global().Get("Error")
 	errorObject := errorConstructor.New(fmt.Sprintf("{}", err))
@@ -92,9 +147,13 @@ func jsonError(err error, reject js.Value) {
 }
 
 func main() {
-	fmt.Println("Go Web Assembly")
+	fmt.Println("Safetorun Webasm loaded")
 	js.Global().Set("listOrgs", listOrganisations())
 	js.Global().Set("deleteOrg", deleteOrganisation())
 	js.Global().Set("createOrg", createOrganisation())
+	js.Global().Set("listApps", listApplications())
+	js.Global().Set("createApp", createApplication())
+	js.Global().Set("deleteApp", deleteApplication())
+	fmt.Println("Go Web Assembly - loaded. Channel open")
 	<-make(chan bool)
 }

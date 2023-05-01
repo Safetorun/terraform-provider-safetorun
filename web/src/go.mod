@@ -5,7 +5,7 @@ go 1.19
 replace github.com/Safetorun/safe_to_run_admin_api/safetorun => ../../safetorun
 
 require (
-	github.com/Safetorun/safe_to_run_admin_api/safetorun v0.0.0-20230310065059-829f1c0c67ce
+	github.com/Safetorun/safe_to_run_admin_api/safetorun v0.0.0-20230313095708-0ff25f81d82d
 	github.com/stretchr/testify v1.7.0
 )
 

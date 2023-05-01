@@ -8,6 +8,7 @@
     <script src="js/js_bridge.js"></script>
 </head>
 <body>
+    <div id="terminal"></div>
 </body>
 </html>
 <script>
@@ -18,7 +19,7 @@
     WebAssembly.instantiateStreaming(fetch("json.wasm"), go.importObject).then((result) => {
         go.run(result.instance);
 
-        $('body').terminal({
+        $('#terminal').terminal({
             listOrgs: async function (token) {
                 await listOrganisations.call(this, token);
             },
@@ -27,6 +28,15 @@
             },
             createOrg: async function (token, orgId, orgName) {
                 await createOrganisation.call(this, token, orgId, orgName);
+            },
+            listApps: async function (token, orgId, showApiKeys) {
+                await listApplications.call(this, token, orgId, showApiKeys);
+            },
+            createApp: async function (token, orgId, appName) {
+                await createApplication.call(this, token, orgId, appName);
+            },
+            deleteApp : async function (token, orgId, appId) {
+                await deleteApplication.call(this, token, orgId, appId);
             },
         }, {
             greetings: 'Let\'s get started'
