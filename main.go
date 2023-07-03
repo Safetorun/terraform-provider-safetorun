@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"github.com/Safetorun/safe_to_run_admin_api/safetorun"
+	"github.com/Safetorun/safe_to_run_admin_api/safetorun/ampli"
 	"github.com/urfave/cli/v2"
 	"log"
 	"os"
@@ -254,6 +255,9 @@ func main() {
 		},
 	}
 	err := app.Run(os.Args)
+
+	ampli.Instance.Flush()
+
 	if err != nil {
 		log.Fatal(err)
 	}
