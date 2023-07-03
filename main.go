@@ -240,6 +240,11 @@ func main() {
 				Action: func(c *cli.Context) error {
 					client := safetorun.New(authToken)
 					organisations, err := client.ListOrganisations()
+
+					if err != nil {
+						return err
+					}
+
 					for _, organisation := range organisations.Items {
 						log.Println(fmt.Sprintf("Orgsanisation Id: %+v", organisation))
 					}

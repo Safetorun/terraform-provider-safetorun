@@ -1,0 +1,14 @@
+{
+  "Zone": "us",
+  "OrgId": "197120",
+  "WorkspaceId": "a64af23f-4a38-476d-9cee-9e052a30f061",
+  "SourceId": "bd2c86ee-7db9-4c56-b3b3-c9bb58559467",
+  "Branch": "main",
+  "Version": "3.0.0",
+  "VersionId": "429db6bb-e413-46b1-b931-2aab6c879039",
+  "Runtime": "go:go-ampli",
+  "Platform": "Go",
+  "Language": "Go",
+  "SDK": "analytics-go",
+  "Path": "./ampli"
+}

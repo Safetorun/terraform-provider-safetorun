@@ -448,6 +448,15 @@ func (v *__UploadUrlInput) GetOrganisationId() string { return v.OrganisationId 
 // GetApplicationId returns __UploadUrlInput.ApplicationId, and is useful for accessing the field via an interface.
 func (v *__UploadUrlInput) GetApplicationId() string { return v.ApplicationId }
 
+// The query or mutation executed by CreateApplication.
+const CreateApplication_Operation = `
+mutation CreateApplication ($organisationId: String!, $applicationName: String!) {
+	createApplication(input: {ApplicationName:$applicationName}, organisationId: $organisationId) {
+		ApplicationId
+	}
+}
+`
+
 func CreateApplication(
 	ctx context.Context,
 	client graphql.Client,
@@ -456,13 +465,7 @@ func CreateApplication(
 ) (*CreateApplicationResponse, error) {
 	req := &graphql.Request{
 		OpName: "CreateApplication",
-		Query: `
-mutation CreateApplication ($organisationId: String!, $applicationName: String!) {
-	createApplication(input: {ApplicationName:$applicationName}, organisationId: $organisationId) {
-		ApplicationId
-	}
-}
-`,
+		Query:  CreateApplication_Operation,
 		Variables: &__CreateApplicationInput{
 			OrganisationId:  organisationId,
 			ApplicationName: applicationName,
@@ -482,6 +485,16 @@ mutation CreateApplication ($organisationId: String!, $applicationName: String!)
 	return &data, err
 }
 
+// The query or mutation executed by CreateOrganisation.
+const CreateOrganisation_Operation = `
+mutation CreateOrganisation ($organisationId: String!, $organisationName: String!) {
+	createOrganisation(organisationId: $organisationId, organisationName: $organisationName) {
+		OrganisationId
+		Status
+	}
+}
+`
+
 func CreateOrganisation(
 	ctx context.Context,
 	client graphql.Client,
@@ -490,14 +503,7 @@ func CreateOrganisation(
 ) (*CreateOrganisationResponse, error) {
 	req := &graphql.Request{
 		OpName: "CreateOrganisation",
-		Query: `
-mutation CreateOrganisation ($organisationId: String!, $organisationName: String!) {
-	createOrganisation(organisationId: $organisationId, organisationName: $organisationName) {
-		OrganisationId
-		Status
-	}
-}
-`,
+		Query:  CreateOrganisation_Operation,
 		Variables: &__CreateOrganisationInput{
 			OrganisationId:   organisationId,
 			OrganisationName: organisationName,
@@ -517,6 +523,15 @@ mutation CreateOrganisation ($organisationId: String!, $organisationName: String
 	return &data, err
 }
 
+// The query or mutation executed by DeleteApplication.
+const DeleteApplication_Operation = `
+mutation DeleteApplication ($organisationId: String!, $applicationId: String!) {
+	deleteApplication(organisationId: $organisationId, applicationId: $applicationId) {
+		ApplicationId
+	}
+}
+`
+
 func DeleteApplication(
 	ctx context.Context,
 	client graphql.Client,
@@ -525,13 +540,7 @@ func DeleteApplication(
 ) (*DeleteApplicationResponse, error) {
 	req := &graphql.Request{
 		OpName: "DeleteApplication",
-		Query: `
-mutation DeleteApplication ($organisationId: String!, $applicationId: String!) {
-	deleteApplication(organisationId: $organisationId, applicationId: $applicationId) {
-		ApplicationId
-	}
-}
-`,
+		Query:  DeleteApplication_Operation,
 		Variables: &__DeleteApplicationInput{
 			OrganisationId: organisationId,
 			ApplicationId:  applicationId,
@@ -551,6 +560,15 @@ mutation DeleteApplication ($organisationId: String!, $applicationId: String!) {
 	return &data, err
 }
 
+// The query or mutation executed by DeleteOrganisation.
+const DeleteOrganisation_Operation = `
+mutation DeleteOrganisation ($organisationId: String!) {
+	deleteOrganisation(organisationId: $organisationId) {
+		OrganisationId
+	}
+}
+`
+
 func DeleteOrganisation(
 	ctx context.Context,
 	client graphql.Client,
@@ -558,13 +576,7 @@ func DeleteOrganisation(
 ) (*DeleteOrganisationResponse, error) {
 	req := &graphql.Request{
 		OpName: "DeleteOrganisation",
-		Query: `
-mutation DeleteOrganisation ($organisationId: String!) {
-	deleteOrganisation(organisationId: $organisationId) {
-		OrganisationId
-	}
-}
-`,
+		Query:  DeleteOrganisation_Operation,
 		Variables: &__DeleteOrganisationInput{
 			OrganisationId: organisationId,
 		},
@@ -583,6 +595,17 @@ mutation DeleteOrganisation ($organisationId: String!) {
 	return &data, err
 }
 
+// The query or mutation executed by GetApplication.
+const GetApplication_Operation = `
+query GetApplication ($organisationId: String!, $applicationId: String!) {
+	getApplication(applicationId: $applicationId, organisationId: $organisationId) {
+		ApplicationId
+		ApplicationName
+		ApiKey
+	}
+}
+`
+
 func GetApplication(
 	ctx context.Context,
 	client graphql.Client,
@@ -591,15 +614,7 @@ func GetApplication(
 ) (*GetApplicationResponse, error) {
 	req := &graphql.Request{
 		OpName: "GetApplication",
-		Query: `
-query GetApplication ($organisationId: String!, $applicationId: String!) {
-	getApplication(applicationId: $applicationId, organisationId: $organisationId) {
-		ApplicationId
-		ApplicationName
-		ApiKey
-	}
-}
-`,
+		Query:  GetApplication_Operation,
 		Variables: &__GetApplicationInput{
 			OrganisationId: organisationId,
 			ApplicationId:  applicationId,
@@ -619,14 +634,8 @@ query GetApplication ($organisationId: String!, $applicationId: String!) {
 	return &data, err
 }
 
-func GetApplications(
-	ctx context.Context,
-	client graphql.Client,
-	organisationId string,
-) (*GetApplicationsResponse, error) {
-	req := &graphql.Request{
-		OpName: "GetApplications",
-		Query: `
+// The query or mutation executed by GetApplications.
+const GetApplications_Operation = `
 query GetApplications ($organisationId: String!) {
 	listApplications(organisationId: $organisationId) {
 		items {
@@ -642,7 +651,16 @@ query GetApplications ($organisationId: String!) {
 		}
 	}
 }
-`,
+`
+
+func GetApplications(
+	ctx context.Context,
+	client graphql.Client,
+	organisationId string,
+) (*GetApplicationsResponse, error) {
+	req := &graphql.Request{
+		OpName: "GetApplications",
+		Query:  GetApplications_Operation,
 		Variables: &__GetApplicationsInput{
 			OrganisationId: organisationId,
 		},
@@ -661,14 +679,8 @@ query GetApplications ($organisationId: String!) {
 	return &data, err
 }
 
-func GetEventsForLinkId(
-	ctx context.Context,
-	client graphql.Client,
-	linkId string,
-) (*GetEventsForLinkIdResponse, error) {
-	req := &graphql.Request{
-		OpName: "GetEventsForLinkId",
-		Query: `
+// The query or mutation executed by GetEventsForLinkId.
+const GetEventsForLinkId_Operation = `
 query GetEventsForLinkId ($linkId: String!) {
 	eventsForLinkId(linkId: $linkId) {
 		items {
@@ -678,7 +690,16 @@ query GetEventsForLinkId ($linkId: String!) {
 		}
 	}
 }
-`,
+`
+
+func GetEventsForLinkId(
+	ctx context.Context,
+	client graphql.Client,
+	linkId string,
+) (*GetEventsForLinkIdResponse, error) {
+	req := &graphql.Request{
+		OpName: "GetEventsForLinkId",
+		Query:  GetEventsForLinkId_Operation,
 		Variables: &__GetEventsForLinkIdInput{
 			LinkId: linkId,
 		},
@@ -697,6 +718,16 @@ query GetEventsForLinkId ($linkId: String!) {
 	return &data, err
 }
 
+// The query or mutation executed by GetForOrganisationId.
+const GetForOrganisationId_Operation = `
+query GetForOrganisationId ($organisationId: String!) {
+	getOrganisationStatus(organisationId: $organisationId) {
+		OrganisationId
+		Status
+	}
+}
+`
+
 func GetForOrganisationId(
 	ctx context.Context,
 	client graphql.Client,
@@ -704,14 +735,7 @@ func GetForOrganisationId(
 ) (*GetForOrganisationIdResponse, error) {
 	req := &graphql.Request{
 		OpName: "GetForOrganisationId",
-		Query: `
-query GetForOrganisationId ($organisationId: String!) {
-	getOrganisationStatus(organisationId: $organisationId) {
-		OrganisationId
-		Status
-	}
-}
-`,
+		Query:  GetForOrganisationId_Operation,
 		Variables: &__GetForOrganisationIdInput{
 			OrganisationId: organisationId,
 		},
@@ -730,13 +754,8 @@ query GetForOrganisationId ($organisationId: String!) {
 	return &data, err
 }
 
-func ListEvents(
-	ctx context.Context,
-	client graphql.Client,
-) (*ListEventsResponse, error) {
-	req := &graphql.Request{
-		OpName: "ListEvents",
-		Query: `
+// The query or mutation executed by ListEvents.
+const ListEvents_Operation = `
 query ListEvents {
 	listEvents {
 		items {
@@ -745,7 +764,15 @@ query ListEvents {
 		}
 	}
 }
-`,
+`
+
+func ListEvents(
+	ctx context.Context,
+	client graphql.Client,
+) (*ListEventsResponse, error) {
+	req := &graphql.Request{
+		OpName: "ListEvents",
+		Query:  ListEvents_Operation,
 	}
 	var err error
 
@@ -761,13 +788,8 @@ query ListEvents {
 	return &data, err
 }
 
-func ListOrganisations(
-	ctx context.Context,
-	client graphql.Client,
-) (*ListOrganisationsResponse, error) {
-	req := &graphql.Request{
-		OpName: "ListOrganisations",
-		Query: `
+// The query or mutation executed by ListOrganisations.
+const ListOrganisations_Operation = `
 query ListOrganisations {
 	listOrganisations {
 		items {
@@ -775,7 +797,15 @@ query ListOrganisations {
 		}
 	}
 }
-`,
+`
+
+func ListOrganisations(
+	ctx context.Context,
+	client graphql.Client,
+) (*ListOrganisationsResponse, error) {
+	req := &graphql.Request{
+		OpName: "ListOrganisations",
+		Query:  ListOrganisations_Operation,
 	}
 	var err error
 
@@ -791,6 +821,15 @@ query ListOrganisations {
 	return &data, err
 }
 
+// The query or mutation executed by UpdateApplication.
+const UpdateApplication_Operation = `
+mutation UpdateApplication ($organisationId: String!, $applicationId: String!, $applicationName: String!) {
+	updateApplication(organisationId: $organisationId, applicationId: $applicationId, input: {ApplicationName:$applicationName}) {
+		ApplicationId
+	}
+}
+`
+
 func UpdateApplication(
 	ctx context.Context,
 	client graphql.Client,
@@ -800,13 +839,7 @@ func UpdateApplication(
 ) (*UpdateApplicationResponse, error) {
 	req := &graphql.Request{
 		OpName: "UpdateApplication",
-		Query: `
-mutation UpdateApplication ($organisationId: String!, $applicationId: String!, $applicationName: String!) {
-	updateApplication(organisationId: $organisationId, applicationId: $applicationId, input: {ApplicationName:$applicationName}) {
-		ApplicationId
-	}
-}
-`,
+		Query:  UpdateApplication_Operation,
 		Variables: &__UpdateApplicationInput{
 			OrganisationId:  organisationId,
 			ApplicationId:   applicationId,
@@ -827,6 +860,15 @@ mutation UpdateApplication ($organisationId: String!, $applicationId: String!, $
 	return &data, err
 }
 
+// The query or mutation executed by UploadUrl.
+const UploadUrl_Operation = `
+query UploadUrl ($organisationId: String!, $applicationId: String!) {
+	getUploadUrl(input: {OrganisationId:$organisationId,ApplicationId:$applicationId}) {
+		Url
+	}
+}
+`
+
 func UploadUrl(
 	ctx context.Context,
 	client graphql.Client,
@@ -835,13 +877,7 @@ func UploadUrl(
 ) (*UploadUrlResponse, error) {
 	req := &graphql.Request{
 		OpName: "UploadUrl",
-		Query: `
-query UploadUrl ($organisationId: String!, $applicationId: String!) {
-	getUploadUrl(input: {OrganisationId:$organisationId,ApplicationId:$applicationId}) {
-		Url
-	}
-}
-`,
+		Query:  UploadUrl_Operation,
 		Variables: &__UploadUrlInput{
 			OrganisationId: organisationId,
 			ApplicationId:  applicationId,

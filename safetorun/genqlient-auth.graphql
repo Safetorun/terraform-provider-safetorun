@@ -1,0 +1,5 @@
+query GetUserId($authorisationToken: String!) {
+    whoami(request: {authorizationToken: $authorisationToken}) {
+        UserId
+    }
+}

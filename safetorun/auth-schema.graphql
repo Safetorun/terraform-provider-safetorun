@@ -1,0 +1,11 @@
+input WhoamiRequest {
+    authorizationToken: String!
+}
+
+type WhoamiResponse {
+    UserId: String!
+}
+
+type Query {
+    whoami(request:WhoamiRequest) : WhoamiResponse!
+}

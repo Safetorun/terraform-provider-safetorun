@@ -3,6 +3,7 @@ package safetorun
 import (
 	"context"
 	"fmt"
+	"github.com/Safetorun/safe_to_run_admin_api/safetorun/ampli"
 	"log"
 )
 
@@ -22,6 +23,7 @@ func (client Client) CreateApplication(request CreateApplicationRequest) (*Creat
 
 	log.Println(fmt.Sprintf("Going to create application inside org ID %s with name %s", request.OrganisationId, request.ApplicationName))
 
+	client.logCreateAppAnalytics(request)
 	response, err := CreateApplication(ctx, client.GqlClient, request.OrganisationId, request.ApplicationName)
 
 	if err != nil {
@@ -37,4 +39,9 @@ func (client Client) CreateApplication(request CreateApplicationRequest) (*Creat
 
 func (client Client) CreateApplicationAndWait(request CreateApplicationRequest) (*CreateApplicationResp, error) {
 	return PerformActionAndWait(client, request, request.OrganisationId, client.CreateApplication)
+}
+
+func (client Client) logCreateAppAnalytics(request CreateApplicationRequest) {
+	createOrg := ampli.CreateApplication.Builder().OrganisationId(request.OrganisationId).Build()
+	ampli.Instance.Track(client.UserId, createOrg)
 }
